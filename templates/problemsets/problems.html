@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load algo %}
+{% block title %}Masalalar{% endblock title %}
+{% block content %}
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+    <div class="card mt-3">
+        <div class="card-body">
+            <div class="scrollbar-overlay" style="max-height: 27rem;">
+                <div class="responsive-table">
+                    <table class="table">
+                        <tr>
+                            <td class="fw-bold">#</td>
+                            <td>Masala</td>
+                            <td>Qiyinchiligi</td>
+                            <td>TimeLimit</td>
+                            <td>MemoryLimit</td>
+                            <td>Category</td>
+                            <td><span class="fas fa-archive"></span></td>
+                        </tr>
+                        {% for problem in problems %}
+                            <tr>
+                                <td class="fw-bold">{{ forloop.counter }}</td>
+                                <td><a href="{% url 'problemset' problem.nanoid %}">{{ problem.name }}</a></td>
+                                <td>{{ problem.difficulty }}%</td>
+                                <td>{{ problem.timelimit }}ms</td>
+                                <td>{{ problem.memorylimit }}MB</td>
+                                <td><code class="text-monospace">{{ problem.id|category_as_p }}</code></td>
+                                <td>
+                                    {% if problem.isArchive %}
+                                        <span class="fas fa-check text-success"></span>
+                                    {% else %}
+                                        <form action="{% url 'archive' problem.id problem.author.username %}" method="post">
+                                            {%csrf_token %}
+                                            <button type="submit" data-bs-toggle="tooltip" data-bs-placement="left" title="{{problem.name}} ni arxivga olish" class="btn btn-falcon-default" name="problem_id" value="{{problem.id}}"><span class="fas fa-archive"></span></button>
+                                        </form>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

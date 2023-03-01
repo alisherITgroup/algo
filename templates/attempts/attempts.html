@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load algo %}
+{% load static %}
+{% block title %}Urinishlar{% endblock title %}
+{% block content %} 
+    <div class="card mt-3">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <tr>
+                        <td>#</td>
+                        <td>Masala</td>
+                        <td>Muallif</td>
+                        <td>Holati</td>
+                        <td>Til</td>
+                        <td>Vaqt</td>
+                        <td>Sana</td>
+                    </tr>
+                    {% for attempt in attempts %}
+                        <tr>
+                            {% if user.id == attempt.author.id %}
+                                <td>
+                                    <a href="{% url 'attempt' attempt.id %}">{{ attempt.id }}</a>
+                                </td>
+                            {% else %}
+                                <td>{{ attempt.id }}</td>
+                            {% endif %}
+                            <td>
+                                <a href="{% url 'problem' attempt.problem.id %}">{{ attempt.problem.name }}</a>
+                            </td>
+                            <td>
+                                <a href="{% url 'profile' attempt.author.username %}">{{ attempt.author}}</a>
+                            </td>
+                            {% if "Acc" in attempt.status %}
+                            <td class="text-success fw-bold">{{ attempt.status }}</td>
+                            {% else %}
+                            <td class="text-danger fw-bold">{{ attempt.status }}</td>
+                            {% endif %}
+                            <td>{{attempt.language}}</td>
+                            <td>{{ attempt.time }}ms</td>
+                            <td>{{ attempt.date }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div class="scrollbar">
+                <div class="d-flex mt-3">
+                    <ul class="pagination mb-1">
+                        {% for page in num_pages %}
+                            {% if forloop.counter == active %}
+                                <li class="active">
+                                    <!-- <button class="page btn btn-falcon-default" type="button"><a href="?page={{ forloop.counter }}" >{{forloop.counter}}</a></button> &nbsp; -->
+                                    <a class="page-link" href="?page={{ forloop.counter }}" >{{forloop.counter}}</a>
+                                </li>
+                                {% else %}
+                                <li class="">
+                                    <!-- <button class="page btn btn-falcon-default" type="button"><a href="?page={{ forloop.counter }}" >{{forloop.counter}}</a></button> &nbsp; -->
+                                    <a class="page-link" href="?page={{ forloop.counter }}" >{{forloop.counter}}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% block title %}Musobaqalar{% endblock title %}
+{% load algo %}
+{% block content %}
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+    <div class="card mt-3">
+        <div class="card-header">Boshlanmagan & Davom etayotgan</div>
+        <div class="card-body">
+           <div class="table-responsive scrollbar">
+            <table class="table table-hover">
+                <tr>
+                    <td>#</td>
+                    <td>Musobaqa</td>
+                    <td>Boshlanish vaqti</td>
+                    <td>Tugash vaqti</td>
+                    <td>Holati</td>
+                    <td>Qo'shilish</td>
+                    {% if contest.id|contest_status == 'started' %}
+                    <td>
+                        Natijalar
+                    </td>
+                    {% endif %}
+                </tr>
+                {% for contest in cons %}
+                <tr>
+                    <td>{{contest.id}}</td>
+                    <td>
+                        {% if contest.id|isAbonent:user.id %}
+                            <a href="{% url 'contest' contest.id %}">{{contest.name }}</a>
+                        {% else %}
+                            <a>{{contest.name }}</a>
+                        {% endif %}
+                    </td>
+                    <td>{{contest.startdate}} | {{ contest.starttime}}</td>
+                    <td>{{contest.enddate}} | {{ contest.endtime}}</td>
+                    <td>
+                        {% if contest.id|contest_status == 'started' %}
+                        <span class="text-success fw-bold">O'tkazilmoqda</span>
+                        {% else %}
+                        <span class="text-info fw-bold">Boshlanmagan</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if user.is_authenticated and contest.isPublic %}
+                            {% if contest.id|isAbonent:user.id %}
+                            <form action="{% url 'join' contest.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary"><span class="fas fa-minus"></span></button>
+                            </form>
+                            {% else %}
+                                <form action="{% url 'join' contest.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-primary"><span class="fas fa-plus"></span></button>
+                                </form>
+                            {% endif %}
+                        {% endif %}
+                        {% if not contest.isPublic and contest.id|isAbonent:user.id %}
+                            <button type="button" class="btn btn-primary"><span class="fas fa-eye"></span></button>
+                        {% else %}
+                        <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#error-modal"><span class="fas fa-unlock"></span></button>
+                            <div class="modal fade" id="error-modal" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
+                                <div class="modal-content position-relative">
+                                <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+                                    <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form action="{% url 'follow_hide_contest' contest.id %}" method="post">
+                                    {% csrf_token %}
+                                    <div class="modal-body p-0">
+                                        <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
+                                        <h4 class="mb-1" id="modalExampleDemoLabel">Yopiq musobaqada ishtirok etish</h4>
+                                        </div>
+                                        <div class="p-4 pb-0">
+                                            <div class="mb-3">
+                                                <label class="col-form-label" for="recipient-name">Pin</label>
+                                                <input name="password" placeholder="Joriy musobaqa uchun kalit so'z" class="form-control" id="recipient-name" type="text" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Yopish</button>
+                                        <button class="btn btn-primary" type="submit">Kirish </button>
+                                    </div>
+                                </form>
+                                </div>
+                            </div>
+                            </div>
+                        {% endif %}
+                    </td>
+                    {% if contest.id|contest_status == 'started' %}
+                    <td>
+                        <a data-bs- class="btn btn-primary" href="{% url 'results' contest.id %}"><span class="fas fa-chart-bar"></span></a>
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </table>
+           </div>
+        </div>
+    </div>
+    <div class="card mt-3">
+        <div class="card-header">Tugagan</div>
+        <div class="card-body">
+            <div class="table-responsive scrollbar">
+                <table class="table table-hover">
+                    <tr>
+                        <td>#</td>
+                        <td>Musobaqa</td>
+                        <td>Boshlanish vaqti</td>
+                        <td>Tugash vaqti</td>
+                        <td>Holati</td>
+                        <td>Natijalar</td>
+                    </tr>
+                    {% for contest in const %}
+                    <tr>
+                        <td>{{ contest.id }}</td>
+                        <td>
+                            <a>{{contest.name}}</a>
+                        </td>
+                        <td>{{contest.startdate}} | {{contest.starttime}}</td>
+                        <td>{{contest.enddate}} | {{contest.endtime}}</td>
+                        <td class="text-danger fw-bold">Tugagan</td>
+                        <td>
+                            <a class="btn btn-primary" href="{% url 'results' contest.id %}"><span class="fas fa-chart-bar"></span></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

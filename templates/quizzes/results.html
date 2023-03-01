@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card mt-3">
+    <div class="card-body">
+        <p class="fw-bold text-info fs-2">{{ quiz }} testi natijalari.</p>
+        <div class="scrollbar-overlay" style="max-height: 27rem">
+            <div class="table-responsive scrollbar">
+                <table class="table table-hover">
+                    <tr>
+                        <td class="fw-bold">#</td>
+                        <td>Ishtirokchi</td>
+                        <td>Ball</td>
+                    </tr>
+                    {% for rating in ratings %}
+                    <tr>
+                        <td class="fw-bold">{{ forloop.counter }}</td>
+                        <td>{{ rating.author }}</td>
+                        <td>{{ rating.rating }} ball</td>
+                    </tr>
+                    {% endfor %}
+                </table>   
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,226 @@
+{% extends "base.html" %}
+{% block title %}{{project.name}}{% endblock title %}
+{% block content %}
+{% if project != None %}
+<div class="mt-3">
+  <div class="row g2">
+      <div class="col-md-6">
+          <div class="d-flex justify-content-end">
+              <button onclick="run()" id="run" class="btn btn-primary"><span class="fas fa-play"></span> Run</button>
+          </div>
+      </div>
+      <div class="col-md-6">
+          <select class="form-control" id="theme">
+              <option value="dracula">Dracula</option>
+              <option value="monokai">Monokai</option>
+              <option value="cobalt">Cobalt</option>
+              <option value="eclipse">Eclipse</option>
+              <option value="erlang-dark">Erlang Dark</option>
+              <option value="icecoder">Icecoder</option>
+              <option value="isotope">Isotope</option>
+              <option value="lesser-dark">Lesser Dark</option>
+              <option value="material">Material</option>
+              <option value="midnight">Midnight</option>
+          </select>
+      </div>
+  </div> <br>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/codemirror.min.js" integrity="sha512-FTEUWSdvusp7brvA5viQQB4I/vO+r6Z86Ag0XXnfKg9ob+WxG+ZylZSkQyjPUgOWejEWqkgOXk5BP2qQXYINhg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/codemirror.min.css" integrity="sha512-ZOZcMHkHfVIzrsVp4h8FzPiZc5n9tcuM+fKwPvz/dEHcfZJYVzukAJ9TqGaTijQVySEqQ02BRDX+XjPslxB8Aw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/keymap/emacs.min.js" integrity="sha512-GfpYtnOXNeaCVPAr3jos+Y7jytk8kh0GD0aX8dO1tBKNmtQMuc6BUI851CZidnyNDSPpj+6SVMDJbmoRIwGpYg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/theme/dracula.min.css" integrity="sha512-PqtRKc9nbcvvS3Wn6UqlHTt+mXqygXoi5Cf3DlbzHQ1Bh8Oy1jy/T9hLXm3Y7Zaws9EeZpzjwgUYiTrqJRIeKg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/mode/python/python.min.js" integrity="sha512-ccH9hsnuXxYtirslEOBqartIni0Msc7JmX0Y8P+vRI7iMb2sqomTCampYRkRZ7m0in4zHZFg+xDsw3elQ1MK5A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/mode/clike/clike.min.js" integrity="sha512-bbdXuaEjLaYYk5B3LLAeyvhEJv+jttYTkQymZDJTn+RAd3uPW4wbyPeE9lrvo6RtkyxL++2jp3ymOMOO/8+keg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/theme/night.min.css" integrity="sha512-lWqzaUq24NlXuYtppRBJnDtF/hKV4C7W6PMyMzcgFviNymrMTw7KH2B4akXa2rRnsSgDd5ksukfBpnSSGiMHdw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/theme/monokai.min.css" integrity="sha512-xTAcmDh9LVfdwYnQWuOwTc/pjzAOp5ErJU4VXB8uV7SJblCftdXHFY7q1yhZudlxsPg0VcNJlgE5cVAHxdGYdg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/theme/cobalt.min.css" integrity="sha512-tKBDfUQMv6xKnWvejncwo2Sy071i868BSD8COPxMjXfw8u9Yj78Cf7O7kxjxUcskgMmVCwZEcqbx0DWlr0fdAA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/theme/lesser-dark.min.css" integrity="sha512-tzLGNciX/1ZCstiFruROrXcpn6q0YXzPlu+JvqAP6wTc5AYgv5p4ouwZifF03D0Ci41nQmdRS81uKKWnv6hPgw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/theme/material.min.css" integrity="sha512-OiZ648zyhcnn7PTezvz5s6eQPjy1PMYKyp1RH6fBWYCQVqo33NE9QrBTBtqZpMzGIg8x0OeECntQpHwYSi3oAw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/theme/midnight.min.css" integrity="sha512-zfUUWVejsfEYYn4BL0Oxzfa5Judasq3Hn9lsazEkc9zQxVGlNFZohOD/QzvnhhmE7b92uTrZW0x7EXvSuvNpJw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/theme/isotope.min.css" integrity="sha512-CnulQ96wwEgfPfiMDlGh70ZTKknu+X+rqOP16qbdwnqacDHJAvhT+VDYGmN2Zf163jCLQk89XkBNgSrs177R+Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/theme/icecoder.min.css" integrity="sha512-oGrnp4kO2prdwhtUDtRu4KEJHu+y3cGR0GlDBwxk5qgZDKimbLyLgptBKhKFwqjf5+ee1hZGhmH3dvOq/0byGA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/theme/erlang-dark.min.css" integrity="sha512-QNwb0jrq1ndaBGanTGQ92Jc2wrLLvqZInEpQVUIRfhk8B0i5rsVtcch5eOLrdASkLLhIwd3Fnggt9zL+sy4jFw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/theme/eclipse.min.css" integrity="sha512-q5T+z2B2SvVgaiFVz6cpb84umuFRI8H8o9+aYjwk8A48IX4sIEyKtWgxJYI6z9FcDRdXjIXJEPOUdBt8NiECmg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+      <script>hljs.initHighlightingOnLoad();</script>
+      <div class="row g-2">
+          <div class="col-md-6">
+              <textarea id="code-editor" name="code" style="display: none;" class="scrollbar">{{project.code}}</textarea>
+          </div>
+          <div class="col md-6">
+              <textarea placeholder="Input" style="resize: none; max-height: 45%; background-color:#282a36 !important; color: #fff; font-weight: bold;"  class="form-control h-100 scrollbar" id="input" name="input"></textarea> <br>
+              <textarea placeholder="Output" style="resize: none; max-height: 45%; background-color:#282a36 !important; color: #fff; font-weight: bold;"  class="form-control h-100 scrollbar" id="output" name="output"></textarea>
+          </div>
+          <span id="loader" class="loader"></span>
+          <style>
+.loader {
+justify-content: center;
+left: -50%;
+text-align: center;
+color: #fff;
+font-size: 10px;
+width: 1em;
+height: 1em;
+border-radius: 50%;
+position: relative;
+text-indent: -9999em;
+animation: mulShdSpin 1.3s infinite linear;
+transform: translateZ(0);
+display: none;
+}
+
+@keyframes mulShdSpin {
+0%,
+100% {
+  box-shadow: 0 -3em 0 0.2em, 
+  2em -2em 0 0em, 3em 0 0 -1em, 
+  2em 2em 0 -1em, 0 3em 0 -1em, 
+  -2em 2em 0 -1em, -3em 0 0 -1em, 
+  -2em -2em 0 0;
+}
+12.5% {
+  box-shadow: 0 -3em 0 0, 2em -2em 0 0.2em, 
+  3em 0 0 0, 2em 2em 0 -1em, 0 3em 0 -1em, 
+  -2em 2em 0 -1em, -3em 0 0 -1em, 
+  -2em -2em 0 -1em;
+}
+25% {
+  box-shadow: 0 -3em 0 -0.5em, 
+  2em -2em 0 0, 3em 0 0 0.2em, 
+  2em 2em 0 0, 0 3em 0 -1em, 
+  -2em 2em 0 -1em, -3em 0 0 -1em, 
+  -2em -2em 0 -1em;
+}
+37.5% {
+  box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em,
+   3em 0em 0 0, 2em 2em 0 0.2em, 0 3em 0 0em, 
+   -2em 2em 0 -1em, -3em 0em 0 -1em, -2em -2em 0 -1em;
+}
+50% {
+  box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em,
+   3em 0 0 -1em, 2em 2em 0 0em, 0 3em 0 0.2em, 
+   -2em 2em 0 0, -3em 0em 0 -1em, -2em -2em 0 -1em;
+}
+62.5% {
+  box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em,
+   3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 0, 
+   -2em 2em 0 0.2em, -3em 0 0 0, -2em -2em 0 -1em;
+}
+75% {
+  box-shadow: 0em -3em 0 -1em, 2em -2em 0 -1em, 
+  3em 0em 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, 
+  -2em 2em 0 0, -3em 0em 0 0.2em, -2em -2em 0 0;
+}
+87.5% {
+  box-shadow: 0em -3em 0 0, 2em -2em 0 -1em, 
+  3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, 
+  -2em 2em 0 0, -3em 0em 0 0, -2em -2em 0 0.2em;
+}
+}
+
+          </style>
+      </div>
+      <script>
+        var themes = document.getElementById('theme')
+        var lang = "{{project.language}}";
+        if(lang == "java") lang = 'text/x-java';
+        if (lang == "cpp") lang = 'text/x-c++src';
+        var config = {
+          lineNumbers: true,
+          indentUnit: 4,
+          mode: `${lang}`,
+          theme: 'dracula',
+          matchBrackets: true
+        }
+        var body = CodeMirror.fromTextArea(document.getElementById('code-editor'), config);
+
+        function run(){
+          let text = body.getDoc().getValue("\n")
+          let lang = "{{project.language}}"
+          let output = document.getElementById("output");
+          let input = document.getElementById("input").value;
+          if (lang == "python"){lang = "py"}
+          let loader = document.getElementById("loader");
+          if ((text.search("input()") != -1 || text.search("cin >>") != -1 || text.search("cin>>") != -1) && input == ""){
+            output.value = "Sizda kirish ma'lumotlari mavjud!";
+            loader.style.display = "flex";
+          } 
+          else{
+          loader.style.display = "flex";
+          data = {"code": text, "language": lang, "status": "p", "user_input": `${input}`, "user": "{{project.subname}}"}
+          fetch('http://algorithmshubapi.pythonanywhere.com/submit/code/', {
+              method: "POST",
+              headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              "Authorization": "Token 3ccc2fda440ec8d03aae3d000127ee23c728f343",
+              },
+              body: JSON.stringify(data)
+              })
+          .then((response) => response.json())
+          .then(function (data){
+              let result = data;
+              document.getElementById("output").value = result["output"];
+              loader.style.display = "none";
+          })
+          .catch(function (error) {console.log('Request failed', error)});
+
+          const csrftoken = getCookie('csrftoken');
+          fetch("{% url 'run' project.subname %}", {
+              method: "POST",
+              headers: { 
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json',
+                  "X-CSRFToken": csrftoken },
+              body: JSON.stringify({"code": text, "lang": lang})
+              })
+          .then((response) => response.json())
+          .then((data) => data)
+          .catch(function (error) {console.log('Request failed', error)});
+          }
+        }
+
+        themes.addEventListener('change',() => {
+          if (themes.value=='dracula') {
+              body.setOption('theme','dracula');
+          } else if (themes.value=='monokai') {
+              body.setOption('theme','monokai');
+          }else if (themes.value=='cobalt') {
+              body.setOption('theme','cobalt');
+          }else if (themes.value=='eclipse') {
+              body.setOption('theme','eclipse');
+          }else if (themes.value=='erlang-dark') {
+              body.setOption('theme','erlang-dark');
+          }else if (themes.value=='icecoder') {
+              body.setOption('theme','icecoder');
+          }else if (themes.value=='lesser-dark') {
+              body.setOption('theme','lesser-dark');
+          }else if (themes.value=='material') {
+              body.setOption('theme','material');
+          }else if (themes.value=='midnight') {
+              body.setOption('theme','midnight');
+          }
+        })
+
+
+    </script>
+<br>
+</div>
+{% else %}
+  <div class="card mt-3 col-md-12">
+      <div class="card-body">
+          <center><p class="fw-black lh-1 text-300 fs-error">404</p></center>
+          <center>
+              <p class="lead mt-4 text-800 mx-auto fw-bold">Afsus! Siz izlayotgan sahifa topilmadi!</p>
+          </center>
+          <hr>
+          <center>
+              <p class="lead mt-4 text-800 mx-auto">Bu sahifa mavjud emas yoki siz uchun yopib qo'yilgan bo'lishi mumkin.</p>
+          </center>
+          <center>
+              <a class="btn btn-falcon-info" href="{% url 'home' %}"><span class="fas fa-home"></span> Bosh sahifa</a>
+          </center>
+      </div>
+  </div>
+{% endif %}
+{% endblock content %}

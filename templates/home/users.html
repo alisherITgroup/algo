@@ -1,0 +1,307 @@
+{% extends "base.html" %}
+{% load static %}
+{%load algo %}
+{% block title %}Foydalanuvchilar{% endblock title %}
+{% block content %}
+<script>
+    let sub = {
+        "Andijon": [
+            "Andijon shahri", 
+            "Andijon tumani", 
+            "Asaka tumani", 
+            "Baliqchi tumani", 
+            "Bo'z tumani", 
+            "Buloqboshi tumani", 
+            "Izboskan tumani", 
+            "Jalolquduq tumani", 
+            "Marhamat tumani", 
+            "Oltinko'l tumani", 
+            "Paxtaobod tumani", 
+            "Qo'rg'ontepa tumani", 
+            "Shahrixon tumani", 
+            "Ulug'nor tumani", 
+            "Xajaobod tumani", 
+            "Xonobod tumani"],
+        "Buxoro": [
+            "Buxoro tumani", 
+            "G'ijduvon tumani", 
+            "Jondor tumani", 
+            "Kogon tumani", 
+            "Olot tumani", 
+            "Peshku tumani", 
+            "Qarako'l tumani", 
+            "Qorovulbozor tumani", 
+            "Romitan tumani", 
+            "Shofirkon tumani", 
+            "Vobkent tumani"],
+        "Farg'ona": [
+            "Bag'dod tumani", 
+            "Beshariq tumani", 
+            "Buvayd tumani", 
+            "Dang'ara tumani", 
+            "Farg'ona tumani", 
+            "Furqat tumani", 
+            "O'zbekiston tumani", 
+            "Oltiariq tumani", 
+            "Qo'shtepa tumani", 
+            "Quva tumani", 
+            "Quvasoy tumani", 
+            "Rishton tumani", 
+            "So'z tumani", 
+            "Toshloq tumani", 
+            "Uchko'prik tumani", 
+            "Yozvon tumani"],
+        "Jizzax": [
+            "Arnasoy tumani",
+            "Baxmal tumani",
+            "Do'stlik tumani",
+            "Forish tumani",
+            "G'allaorol tumani",
+            "Mirzacho'l tumani",
+            "Paxtakor tumani",
+            "Sharof Rashidov tumani",
+            "Yangiobod tumani",
+            "Zafarobod tumani",
+            "Zarbdor tumani",
+            "Zomin tumani"
+        ],
+        "Namangan": [
+            "Chortoq tumani",
+            "Chust tumani",
+            "Kosonsoy tumani",
+            "Mingbuloq tumani",
+            "Namangan tumani",
+            "Norin tumani",
+            "Pop tumani",
+            "To'raqo'rg'on tumani",
+            "Uchqo'rg'on tumani",
+            "Uychi tumani",
+            "Yangiqo'rg'on tumani"
+        ],
+        "Navoiy": [
+            "Karmana tumani",
+            "Konimex tumani",
+            "Navbahor tumani",
+            "Nurota tumani",
+            "Qiziltepa tumani",
+            "Tomdi tumani",
+            "Uchquduq tumani",
+            "Xatirchi tumani"
+        ],
+        "Qashqadaryo": [
+            "Chiroqchi tumani",
+            "Dehqonobod tumani",
+            "G'uzor tumani",
+            "Kasbi tumani",
+            "Kitob tumani",
+            "Ko'kdala tumani",
+            "Koson tumani",
+            "Mirishkor tumani",
+            "Muborak tumani",
+            "Nishon tumani",
+            "Qamashi tumani",
+            "Qarshi tumani",
+            "Shahrisabz tumani",
+            "Yakkabog' tumani"
+        ],
+        "Qoraqalpog'iston Respublikasi": [
+            "Amudaryo tumani",
+            "Beruniy tumani",
+            "Chimbor tumani",
+            "Ellikqal'a tumani",
+            "Kegeyli tumani",
+            "Mo'ynoq tumani",
+            "Nukus tumani",
+            "Qanliko'l tumani",
+            "Qo'ng'irot tumani",
+            "Qorao'zak tumani",
+            "Shumanay tumani",
+            "Taxtako'pir tumani",
+            "To'rtko'l tumani",
+            "Xo'jayli tumani",
+            "Taxiatosh tumani",
+            "Bo'zatov tumani"
+        ],
+        "Samarqand": [
+            "Bulung'ur tumani",
+            "Ishtixon tumani",
+            "Jomboy tumani",
+            "Kattaqo'rg'on tumani",
+            "Narpay tumani",
+            "Nurobod tumani",
+            "Oqdaryo tumani",
+            "Pastdarg'om tumani",
+            "Paxtachi tumani",
+            "Payariq tumani",
+            "Qo'shrabot tumani",
+            "Samarqand tumani",
+            "Toyloq tumani",
+            "Urgut tumani"
+        ],
+        "Sirdayo": [
+            "Boyovut tumani",
+            "Guliston shahri",
+            "Guliston tumani",
+            "Mirzaobod tumani",
+            "Oqoltin tumani",
+            "Sardoba tumani",
+            "Sayxunobod tumani",
+            "Sirdaryo tumani",
+            "Xovos tumani",
+            "Yangiyer shahri",
+        ],
+        "Surxondaryo": [
+            "Angor tumani",
+            "Boysun tumani",
+            "Denov tumani",
+            "Jarqo'rg'on tumani",
+            "Muzrabot tumani",
+            "Oltinsoy tumani",
+            "Qiziriq tumani",
+            "Qumqo'rg'on tumani",
+            "Sarosiyo tumani",
+            "Sherobod tumani",
+            "Sho'rchi tumani",
+            "Termiz tumani",
+            "Uzun tumani",
+        ],
+        "Toshkent": [
+            "Bekobod tumani",
+            "Bo'ka tumani",
+            "Bo'stonliq tumani",
+            "Chinoz tumani",
+            "Ohangaron tumani",
+            "O'rta Chirchiq tumani",
+            "Oqqo'rg'on tumani",
+            "Parkent tumani",
+            "Piskent tumani",
+            "Qibray tumani",
+            "Quyi Chirchiq tumani",
+            "Yangiyo'l tumani",
+            "Yuqori Chirchiq tumani",
+            "Zangiota tumani"
+        ],
+        "Toshkent shahri": [
+            "Bektemir tumani",
+            "Chilonzor tumani",
+            "Hamza tumani",
+            "Mirobod tumani",
+            "Mirzo Ulug'bek tumani", 
+            "Olmazor tumani",
+            "Sergeli tumani",
+            "Shayxontohur tumani",
+            "Uchtepa tumani",
+            "Yakkasaroy tumani",
+            "Yangihayot tumani",
+            "Yunusobod tumani"
+        ]
+        
+    }
+    window.onload = function(){
+        let city = document.getElementById("city");
+        let town = document.getElementById("town");
+        for(let x in sub){
+            city.options[city.options.length] = new Option(x);
+        }
+
+        city.onchange = function(){
+            town.length = 1;
+            let z = sub[city.value];
+            console.log(z)
+            for(let i=0; i<z.length; i++){
+                town.options[town.options.length] = new Option(z[i]);
+            }
+        }
+    }
+</script>
+<div class="card mt-3">
+    <div class="card-body">
+        <form method="get">
+            <div class="row">
+                <div class="col-md-2 mt-2">
+                    <select name="city" id="city" class="form-control">
+                        <option value="">Shahar</option>
+                    </select>
+                </div>
+                <div class="col-md-2 mt-2">
+                    <select name="town" id="town" class="form-control">
+                        <option value="">Tuman</option>
+                    </select>
+                </div>
+            </div> <br>
+            <input type="search" name="search" value="{{username}}" class="form-control" placeholder="Qidirish"> <br>
+        </form>
+    </div>
+</div>
+<div class="card mt-3">
+    <div class="card-body">
+        <div class="table-responsive scrollbar">
+            <table class="table table-hover">
+                <tr>
+                    <td>#</td>
+                    <td>Foydalanuvchi nomi</td>
+                    <td>Lavozimi</td>
+                    <td>Ball</td>
+                    {% if user.is_superuser %}
+                    <td>
+                        <span class="fas fa-edit"></span>
+                    </td>
+                    {% endif %}
+                </tr>
+                {% for huser in users %}
+                    <tr>
+                        <td>{{huser.id }}</td>
+                        <td>
+                            <a class="fw-bold text-info" href="{% url 'profile' huser.username %}">{{huser.username }}</a>
+                        </td>
+                        <td>
+                            {% if huser.isExpert and huser.isTeacher %}
+                                SubAdmin
+                            {% elif huser.isExpert and not huser.isTeacher %}
+                                Expert
+                            {% elif huser.isTeacher and not huser.isExpert %}
+                                O'qituvchi
+                            {% else %}
+                                O'quvchi
+                            {% endif %}
+                        </td>
+                        <td class="fs-1 fw-bold" data-countup='{"endValue":{{huser.rating}}}'>0</td>
+                        {% if user.is_superuser %}
+                        <td>
+                            <a href="{% url 'profile_edit' huser.id %}"><span class="fas fa-user-edit"></span></a>
+                        </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        {% if check %}
+        <div class="table-responsive">
+            <div class="d-flex justify-content-center mt-3">
+                <ul class="pagination mb-1">
+                    <li>
+                        <a class="page-link" href="" ><span class="fas fa-angle-double-left"></span></a>
+                    </li>
+                    {% for page in num_pages %}
+                        {% if forloop.counter == active %}
+                            <li class="active">
+                                <a class="page-link" href="?search={% if query %}{{query}}{% endif %}&page={{ forloop.counter }}" >{{forloop.counter}}</a>
+                            </li>
+                            {% else %}
+                            <li class="">
+                                <a class="page-link" href="?search={% if query %}{{query}}{% endif %}&page={{ forloop.counter }}" >{{forloop.counter}}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    <li>
+                        <a class="page-link" href="?page={{last}}" ><span class="fas fa-angle-double-right"></span></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+<script src="{% static 'public/vendors/countup/countUp.umd.js' %}"></script>
+{% endblock content %}

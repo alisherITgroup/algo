@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Maqolalar{% endblock title %}
+{% load algo %}
+{% load static %}
+{% block content %}
+<div class="row mb-3 g3 mt-3">
+    {% for post in posts %}
+    <article class="col-md-6 col-xxl-4 mb-3">
+        <div class="card h-100 overflow-hidden">
+            <div class="card-body p-0 d-flex flex-column justify-content-between">
+                <div>
+                    <div class="hoverbox text-center">
+                        <a class="text-decoration-none" data-gallery="attachment-bg"><img class="w-100 h-100 fit-cover" src="{{post.cover.url}}" alt="" /></a>
+                    </div>
+                    <div class="p-3">
+                        <h5 class="fs-0 mb-2"><a class="text-dark" href="{% url 'post' post.id %}">{{post.name}}</a></h5>
+                        <h5 class="fs-0"><a href="{% url 'profile' post.author.username %}">{{post.author.username}}</a></h5>
+                    </div> 
+                    <div class="row g-0 mb-3 align-items-end">
+                        <div class="col ps-3">
+                            <h4 class="fs-1 text-warning d-flex align-items-center"> <span>{{post.date}}</span>
+                            </h4>
+                            <p class="mb-0 fs--1 text-800">123 ta izox</p>
+                          </div>
+                        <div class="col-auto pe-3">
+                            <a class="btn btn-sm btn-falcon-default me-2 hover-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="{{post.count_likes}}">
+                                <span class="far fa-heart" data-fa-transform="down-2">
+                                </span>
+                            </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </article>
+    {% endfor %}
+</div>
+{% endblock content %}

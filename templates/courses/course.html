@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% block title %}{{course.name}}{% endblock title %}
+{% load algo %}
+{% load static %}
+{% block content %}
+{% if course.isPublic or user.is_superuser %}
+<div class="content">
+  <div class="card overflow-hidden light mb-3">
+    <div class="card-body bg-black">
+      <div class="bg-holder rounded-3" style="background-image:url({% static 'public/assets/img/icons/spot-illustrations/course-details-bg.png' %});">
+      </div>
+      <!--/.bg-holder-->
+
+      <div class="row">
+        <div class="col-xl-8 position-relative">
+          <div class="row g-3 align-items-center">
+            <div class="col-lg-5">
+              <div class="position-relative d-flex">
+                <img width="250" height="200" class="rounded-1" src="{{course.cover.url}}" alt="">
+                <a class="text-decoration-none position-relative d-block py-7 text-center" href="" data-gallery="attachment-bg"><img class="rounded-1" src="" width="60" alt="" /></a>
+              </div>
+            </div>
+            <div class="col-lg-7">
+              <h6 class="fw-semi-bold text-400">Muallif <a class="text-info" href="{% url 'profile' course.author.username %}">
+                  {% if course.author.first_name and course.author.first_name %}
+                  {{course.author.first_name}} {{course.author.last_name}}
+                  {% else %}
+                  {{course.author.username}}
+                  {% endif %}
+              </a></h6>
+              <h2 class="fw-bold text-white">{{course.name}} </h2>
+              <p class="text-white fw-semi-bold fs--1"><span class="me-1">4.8</span><span class="fa fa-star text-warning"></span><span class="fa fa-star text-warning"></span><span class="fa fa-star text-warning"></span><span class="fa fa-star text-warning"></span><span class="fa fa-star-half-alt text-warning star-icon"></span>
+              </p>
+            </div>
+          </div>
+          <hr class="text-secondary text-opacity-50" />
+          <ul class="list-unstyled d-flex flex-wrap gap-3 fs--1 fw-semi-bold text-300 mt-3 mb-0">
+            <li><span class="fas fa-graduation-cap text-white me-1"> </span>{{course.users.count}} O'quvchi</li>
+            <li><span class="fas fa-user-graduate text-white me-1"> </span>{{persent}} Bitiruvchi</li>
+            <li><span class="fas fa-headphones text-white me-1"> </span>{{course.lang}}O'zbek</li>
+            <li><span class="fas fa-closed-captioning text-white me-1"> </span>{{course.lang}}O'zbek</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row g-lg-3">
+    <div class="col-lg-8 order-1 order-lg-0">
+      <div class="card mb-3 bg-transparent border shadow-none">
+        <div class="card-body">
+          <p class="text-primary">Izox</p>
+          {{course.description}}
+        </div>
+      </div>
+      <div class="card mb-3">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Darslar</h5>
+        </div>
+        <div class="card-body p-0 scrollbar-overlay" style="max-height: 20rem;">
+          {% for lesson in lessons %}
+          <div class="d-flex align-items-center px-x1 py-2 border-bottom border-200">
+              <div class="hoverbox me-3 my-1">
+                  <div class="bg-attachment bg-attachment-square">
+                    <div class="bg-holder">
+                    </div>
+                  </div>
+              </div>
+              <div class="flex-1">
+                <h5 class="fs-0"><a class="text-decoration-none" href="{% url 'lesson' course.id lesson.id %}" data-gallery="attachment-title">{{lesson.name}}</a>
+                </h5>
+                <p class="fs--1 mb-0">{{lesson.description}}</p>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="course-details-sticky-sidebar mb-lg-8 mt-xl-n10 pe-xl-4 pe-xxl-7">
+        <div class="card mb-3">
+          <div class="card-header bg-light d-none d-lg-block">
+            <h5 class="mb-0">Kurs haqida</h5>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-7 col-lg-12 order-md-1 order-lg-0">
+                <h2 class="fw-medium d-flex align-items-center">${{course.price}}
+                  <del class="ms-2 fs--1 text-500">${{course.price}}</del>
+                </h2>
+                <p class="text-danger fs--1 fw-semi-bold"><span class="far fa-clock me-2"></span>{{course.date}}</p>
+              </div>
+              <div class="col-md-5 col-lg-12">
+                <hr class="border-top border-dashed d-md-none d-lg-block" />
+                <h6 class="fw-bold"></h6>
+                {{course.about}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+    {% else %}
+    <div class="row mt-3">
+        <div class="card col-md-12">
+            <div class="card-body">
+                <center><p class="fw-black lh-1 text-300 fs-error">404</p></center>
+                <center>
+                    <p class="lead mt-4 text-800 mx-auto fw-bold">Afsus! Siz izlayotgan sahifa topilmadi!</p>
+                </center>
+                <hr>
+                <center>
+                    <p class="lead mt-4 text-800 mx-auto">Bu sahifa mavjud emas yoki siz uchun yopib qo'yilgan bo'lishi mumkin.</p>
+                </center>
+                <center>
+                    <a class="btn btn-falcon-info" href="{% url 'home' %}"><span class="fas fa-home"></span> Bosh sahifa</a>
+                </center>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+{% endblock content%}

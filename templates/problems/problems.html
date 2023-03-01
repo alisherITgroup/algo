@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% load algo %}
+{% block title %}Masalalar{% endblock title %}
+{% block content %}
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+<div class="row g-2">
+    <div class="col-md-2">
+        <div class="card mt-3">
+            <div class="card-body">
+                <center class="text-monospace fw-bold"><code>Saralash</code></center> <br>
+                <form method="get">
+                    <span class="text-success fs--1 fw-bold">Category</span>
+                    <select name="category" id="category" class="form-control text-info">
+                        <option value="">-Tanlang-</option>
+                        {% for category in user.id|categories %}
+                            <option class="text-info" value="{{category.id}}">{{category.name }}</option>
+                        {% endfor %}
+                    </select> <br>
+                    <span class="text-success fs--1 fw-bold">Qiyinchiligi</span>
+                    <input type="number" name="difficulty" class="form-control" placeholder=""> <br>
+                    <center><button type="submit" class="btn btn-info">Saqlash</button></center>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-10">
+        <div class="card mt-3">
+            <div class="card-body">
+                <div class="scrollbar-overlay" style="max-height: 27rem">
+                    <div class="table-responsive scrollbar table-hover">
+                        <table class="table">
+                            <tr>
+                                <td></td>
+                                <td class="fw-bold">#</td>
+                                <td>Masala</td>
+                                <td>
+                                    <form method="get">
+                                        Qiyinchiligi
+                                        <a href="?sort={% if bool %}{{bool}}{% else %}off{% endif %}" class="text-info">
+                                            <span class="{% if bool %}{{boolicon}}{% else %}fas fa-angle-double-up{% endif %}"></span>
+                                        </a>
+                                    </form>
+                                </td>
+                                <td>TimeLimit</td>
+                                <td>MemoryLimit</td>
+                                <td>Category</td>
+                                {% if user.isTeacher %}
+                                <td><span class="fas fa-edit"></span></td>
+                                {% endif %}
+                            </tr>
+                            {% for problem in problems %}
+                                <tr>
+                                    {% if user.is_authenticated %}
+                                    <td>
+                                        {{ user.id|check_problem:problem.id|safe }}
+                                    </td>
+                                    {% endif %}
+                                    <td class="fw-bold">{{ problem.id }}</td>
+                                    <td><a href="{% url 'problem' problem.id %}" class="text-info fw-bold">{{ problem.name }}</a></td>
+                                    <td><center>{{ problem.difficulty }}%</center></td>
+                                    <td><center>{{ problem.timelimit }}ms</center></td>
+                                    <td><center>{{ problem.memorylimit }}MB</center></td>
+                                    <td><code class="text-monospace">{{ problem.id|category_as_p2 }}</code></td>
+                                    {% if user.id == problem.author.id %}
+                                    <td>
+                                        <a href="{% url 'problem_update' problem.id %}"><span class="fas fa-edit"></span></a>
+                                    </td>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+                {% if check %}
+                <div class="table-responsive">
+                    <div class="d-flex justify-content-center mt-3">
+                        <ul class="pagination mb-1">
+                            <li>
+                                <a class="page-link" href="?page=1" ><span class="fas fa-angle-double-left"></span></a>
+                            </li>
+                            {% for page in num_pages %}
+                                {% if forloop.counter == active %}
+                                    <li class="active">
+                                        <!-- <button class="page btn btn-falcon-default" type="button"><a href="?page={{ forloop.counter }}" >{{forloop.counter}}</a></button> &nbsp; -->
+                                        <a class="page-link" href="?page={{ forloop.counter }}" >{{forloop.counter}}</a>
+                                    </li>
+                                    {% else %}
+                                    <li class="">
+                                        <!-- <button class="page btn btn-falcon-default" type="button"><a href="?page={{ forloop.counter }}" >{{forloop.counter}}</a></button> &nbsp; -->
+                                        <a class="page-link" href="?page={{ forloop.counter }}" >{{forloop.counter}}</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                            <li>
+                                <a class="page-link" href="?page={{last}}" ><span class="fas fa-angle-double-right"></span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

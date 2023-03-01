@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+{% load static %}
+{% load algo %}
+{% block title %}{% endblock title %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.js" integrity="sha512-8RnEqURPUc5aqFEN04aQEiPlSAdE0jlFS/9iGgUyNtwFnSKCXhmB6ZTNl7LnDtDWKabJIASzXrzD0K+LYexU9g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.css" integrity="sha512-uf06llspW44/LZpHzHT6qBOIVODjWtv4MxCricRxkzvopAlSWnTf6hpZTFxuuZcuNE9CBQhqE0Seu1CoRk84nQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+{% block content %}
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+<div class="card mt-3">
+    <div class="card-header">
+        <center>
+            <h3 class="text-info">#{{ problem.id }}. {{ problem.name }}</h3>
+        </center>
+    </div>
+    <div class="card-body">
+        <center>
+            <span class="badge rounded-pill badge-soft-success">TimeLimit: {{ problem.timelimit }}ms</span>
+            <span class="badge rounded-pill badge-soft-primary">MemoryLimit: {{ problem.memorylimit }}MB</span>
+            <span class="badge rounded-pill badge-soft-info">Qiyinchiligi: {{ problem.difficulty }}%</span>
+        </center>
+        <center><code class="text-monospace">{{ problem.id|category_as_p2 }}</code></center>
+        <hr>
+        <a href="{% url 'profile' problem.author.username%}" class="badge rounded-pill badge-soft-info">Muallif: {{ problem.author }}</a> <br>
+        {{ problem.problem|safe }}
+        <hr>
+        <p style="display: inline;"><span class="text-info">Kirish ma'lumotlari: </span> {{ problem.infoin|safe }}</p>
+        <hr>
+        <p style="display: inline;"><span class="text-info">Chiqish ma'lumotlari: </span> {{ problem.infoout|safe }}</p>
+        <hr>
+        {% if problem.comment %}
+        <p style="display: inline;"><span class="text-info">Izox: </span> {{ problem.comment|safe }}</p><hr>
+        {% endif %}
+        <p class="text-info">Testlar</p>
+        <div class="table-responsive scrollbar">
+            <table class="table table-hover">
+                <tr style="border: 0.1px solid #ccc">
+                    <td style="border: 0.1px solid #ccc">#</td>
+                    <td style="border: 0.1px solid #ccc">Kirish oqimi</td>
+                    <td style="border: 0.1px solid #ccc">Chiqish oqimi</td>
+                </tr>
+                {{ problem.id|tests_as_table2|safe }}
+            </table>
+        </div> <br>
+        {% if user.is_authenticated %}
+        <form action="{% url 'problem_send' problem.id %}" method="post">
+            {% csrf_token %}
+            <div class="row g-2">
+                <div class="col-md-8">
+                  <select class="form-control" name="lang" id="lang" required>
+                    {{user.id|langs_as_options2:problem.id|safe}}
+                </select>
+                </div>
+                <div class="col-md-4">
+                  <select class="form-control" id="theme">
+                    <option value="dracula">Dracula</option>
+                    <option value="monokai">Monokai</option>
+                    <option value="cobalt">Cobalt</option>
+                    <option value="eclipse">Eclipse</option>
+                    <option value="erlang-dark">Erlang Dark</option>
+                    <option value="icecoder">Icecoder</option>
+                    <option value="isotope">Isotope</option>
+                    <option value="lesser-dark">Lesser Dark</option>
+                    <option value="material">Material</option>
+                    <option value="midnight">Midnight</option>
+                  </select>
+                </div>
+              </div>
+               <br>
+              <div style="border: 1px solid #ccc">
+                    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.js"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/codemirror.min.js" integrity="sha512-FTEUWSdvusp7brvA5viQQB4I/vO+r6Z86Ag0XXnfKg9ob+WxG+ZylZSkQyjPUgOWejEWqkgOXk5BP2qQXYINhg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/codemirror.min.css" integrity="sha512-ZOZcMHkHfVIzrsVp4h8FzPiZc5n9tcuM+fKwPvz/dEHcfZJYVzukAJ9TqGaTijQVySEqQ02BRDX+XjPslxB8Aw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/keymap/emacs.min.js" integrity="sha512-GfpYtnOXNeaCVPAr3jos+Y7jytk8kh0GD0aX8dO1tBKNmtQMuc6BUI851CZidnyNDSPpj+6SVMDJbmoRIwGpYg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/theme/dracula.min.css" integrity="sha512-PqtRKc9nbcvvS3Wn6UqlHTt+mXqygXoi5Cf3DlbzHQ1Bh8Oy1jy/T9hLXm3Y7Zaws9EeZpzjwgUYiTrqJRIeKg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/mode/python/python.min.js" integrity="sha512-ccH9hsnuXxYtirslEOBqartIni0Msc7JmX0Y8P+vRI7iMb2sqomTCampYRkRZ7m0in4zHZFg+xDsw3elQ1MK5A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/mode/clike/clike.min.js" integrity="sha512-bbdXuaEjLaYYk5B3LLAeyvhEJv+jttYTkQymZDJTn+RAd3uPW4wbyPeE9lrvo6RtkyxL++2jp3ymOMOO/8+keg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/theme/night.min.css" integrity="sha512-lWqzaUq24NlXuYtppRBJnDtF/hKV4C7W6PMyMzcgFviNymrMTw7KH2B4akXa2rRnsSgDd5ksukfBpnSSGiMHdw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/theme/monokai.min.css" integrity="sha512-xTAcmDh9LVfdwYnQWuOwTc/pjzAOp5ErJU4VXB8uV7SJblCftdXHFY7q1yhZudlxsPg0VcNJlgE5cVAHxdGYdg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/theme/cobalt.min.css" integrity="sha512-tKBDfUQMv6xKnWvejncwo2Sy071i868BSD8COPxMjXfw8u9Yj78Cf7O7kxjxUcskgMmVCwZEcqbx0DWlr0fdAA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/theme/lesser-dark.min.css" integrity="sha512-tzLGNciX/1ZCstiFruROrXcpn6q0YXzPlu+JvqAP6wTc5AYgv5p4ouwZifF03D0Ci41nQmdRS81uKKWnv6hPgw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/theme/material.min.css" integrity="sha512-OiZ648zyhcnn7PTezvz5s6eQPjy1PMYKyp1RH6fBWYCQVqo33NE9QrBTBtqZpMzGIg8x0OeECntQpHwYSi3oAw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/theme/midnight.min.css" integrity="sha512-zfUUWVejsfEYYn4BL0Oxzfa5Judasq3Hn9lsazEkc9zQxVGlNFZohOD/QzvnhhmE7b92uTrZW0x7EXvSuvNpJw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/theme/isotope.min.css" integrity="sha512-CnulQ96wwEgfPfiMDlGh70ZTKknu+X+rqOP16qbdwnqacDHJAvhT+VDYGmN2Zf163jCLQk89XkBNgSrs177R+Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/theme/icecoder.min.css" integrity="sha512-oGrnp4kO2prdwhtUDtRu4KEJHu+y3cGR0GlDBwxk5qgZDKimbLyLgptBKhKFwqjf5+ee1hZGhmH3dvOq/0byGA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/theme/erlang-dark.min.css" integrity="sha512-QNwb0jrq1ndaBGanTGQ92Jc2wrLLvqZInEpQVUIRfhk8B0i5rsVtcch5eOLrdASkLLhIwd3Fnggt9zL+sy4jFw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.16.0/theme/eclipse.min.css" integrity="sha512-q5T+z2B2SvVgaiFVz6cpb84umuFRI8H8o9+aYjwk8A48IX4sIEyKtWgxJYI6z9FcDRdXjIXJEPOUdBt8NiECmg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+                    <script>hljs.initHighlightingOnLoad();</script>
+                    <textarea id="code-editor" name="code" style="display: none;">{{user.id|last_attempt_code:problem.id}}</textarea>
+                    <script>
+                      var langs = document.getElementById('lang')
+                      var themes = document.getElementById('theme')
+                      var lang = langs.options[langs.selectedIndex].value;
+                      if(lang == "java") lang = 'text/x-java';
+                      if (lang == "cpp") lang = 'text/x-c++src';
+                      var config = {
+                        lineNumbers: true,
+                        indentUnit: 4,
+                        mode: `${lang}`,
+                        theme: 'dracula',
+                        matchBrackets: true
+                      }
+                      var body = CodeMirror.fromTextArea(document.getElementById('code-editor'), config);
+                      langs.addEventListener('change',() => {
+                          if (langs.value=='python') {
+                              body.setOption('mode','python');
+                          } else if (langs.value=='cpp') {
+                              body.setOption('mode','text/x-c++src');
+                          } else {
+                              body.setOption('mode','text/x-java');
+                          }
+                      })
+
+                      themes.addEventListener('change',() => {
+                        if (themes.value=='dracula') {
+                            body.setOption('theme','dracula');
+                        } else if (themes.value=='monokai') {
+                            body.setOption('theme','monokai');
+                        }else if (themes.value=='cobalt') {
+                            body.setOption('theme','cobalt');
+                        }else if (themes.value=='eclipse') {
+                            body.setOption('theme','eclipse');
+                        }else if (themes.value=='erlang-dark') {
+                            body.setOption('theme','erlang-dark');
+                        }else if (themes.value=='icecoder') {
+                            body.setOption('theme','icecoder');
+                        }else if (themes.value=='lesser-dark') {
+                            body.setOption('theme','lesser-dark');
+                        }else if (themes.value=='material') {
+                            body.setOption('theme','material');
+                        }else if (themes.value=='midnight') {
+                            body.setOption('theme','midnight');
+                        }
+                      })
+              
+              
+                  </script>
+              </div> <br>
+            <button class="btn btn-primary" type="submit">Yuborish</button>
+        </form>
+        {% endif %}
+        <br>
+        {% if user.is_authenticated %}
+        <div class="table-responsive scrollbar">
+            <table class="table table-hover">
+                <tr style="border: 0.1px solid #ccc">
+                    <td style="border: 0.1px solid #ccc; max-width: 5px;">#</td>
+                    <td style="border: 0.1px solid #ccc;">Holati</td>
+                    <td style="border: 0.1px solid #ccc;">Vaqt</td>
+                    <td style="border: 0.1px solid #ccc;">Til</td>
+                    <td style="border: 0.1px solid #ccc;">Sana</td>
+                </tr>
+                {% for attempt in attempts %}
+                    <tr style="border: 0.1px solid #ccc">   
+                        <td style="border: 0.1px solid #ccc;">
+                            <a href="{% url 'attempt' attempt.id %}">{{ attempt.id }}</a>
+                        </td>
+                        {% if "Acc" in attempt.status %}
+                            <td style="border: 0.1px solid #ccc;" class="text-success fw-bold">{{ attempt.status }}</td>
+                        {% else %}
+                            <td style="border: 0.1px solid #ccc;" class="text-danger fw-bold">{{ attempt.status }}</td>
+                        {% endif %}
+                        <td style="border: 0.1px solid #ccc;">{{ attempt.time }}ms</td>
+                        <td>
+                            {{attempt.language}}
+                        </td>
+                        <td style="border: 0.1px solid #ccc;">{{ attempt.date}}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% else %}
+        <span class="text-danger">Siz tizimga kirmagansiz, shuning uchun masala yechimini yubora olmaysiz. Masala yechimini yuborish uchun tizmga</span>
+        <a class="text-info" href="{% url 'login' %}">Kiring</a> <span class="text-danger">yoki</span>
+        <a class="text-info" href="{% url 'signup' %}">Ro'yxatdan o'ting</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock content%}

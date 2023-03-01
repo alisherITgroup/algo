@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block title %}{{quiz.name}}{% endblock title %}
+{% load algo %}
+{% block content %}
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+<div class="card mt-3">
+    <div class="card-body">
+        <a class="btn btn-primary"><span class="fas fa-info"></span> Test haqida</a>
+        {% if user.id == quiz.author.id %}
+        <a href="{% url 'create_question' quiz.id %}" class="btn btn-primary"><span class="fas fa-plus"></span> Savol qo'shish</a>
+        {% if quiz.isPublished %}
+        &nbsp; <span class="fas fa-check text-success"></span> &nbsp;
+        {% else %}
+        <a title="Agar barcha savollarni qo'shib bo'lgan bo'lsangiz testni chop eting." href="{% url 'publish' quiz.id %}" class="btn btn-primary"><span class="fas fa-print"></span> Chop etish</a>
+        {% endif %}
+        <a href="{% url 'quiz_edit' quiz.id %}" class="btn btn-primary"><span class="fas fa-edit"></span> Tahrirlash</a>
+        {% endif %}
+        <a href="{% url 'quiz_ratings' quiz.id %}" class="btn btn-primary"><span class="fas fa-chart-bar"></span> Natijalar</a>
+        <span class="badge badge-soft-info">{% if quiz.isPublic %}Ommaviy{% else %}Yopiq {% endif %}</span>
+        <div class="table-responsive scrollbar">
+            <table class="table">
+                <tr>
+                    <td>
+                        <p class="fw-bold">Test nomi</p>
+                    </td>
+                    <td>{{ quiz.name }}</td>
+                </tr>
+                <tr>
+                    <td>
+                        <p class="fw-bold">Murabbiy</p>
+                    </td>
+                    <td><a href="{% url 'profile' quiz.author.username%}">{{ quiz.author }}</a></td>
+                </tr>
+                <tr>
+                    <td>
+                        <p class="fw-bold">Savollar soni</p>
+                    </td>
+                    <td>{{ quiz.id|questions_count }}</td>
+                </tr>
+                <tr>
+                    <td>
+                        <p class="fw-bold">Ishtirokchilar soni</p>
+                    </td>
+                    <td>{{ users }}</td>
+                </tr>
+                <tr>
+                    <td>
+                        <p class="fw-bold">Holati</p>
+                    </td>
+                    <td>{{ status }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+{% if questions %}
+{% if quiz.author.id == user.id or quiz.isPublished %}
+<div class="card mt-3 mb-3">
+    <div class="card-body">
+        <form action="{% url 'check' quiz.id user.username %}" method="post">
+            {% csrf_token %}
+            {% for question in questions %}
+            <style>
+                p{
+                    display: inline;
+                }
+            </style>
+            <p class="fw-bold" style="display: inline-block;"><span>{{ forloop.counter }}. {% if user.id == quiz.author.id %}<a href="{% url 'edit_question' question.id     %}"><span class="fas fa-edit"></span></a>{% endif %}&nbsp;</span> {{ question.question|safe }}</p> <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<input required value="{{ question.answer1 }}" type="radio" name="{{ question.id }}" id="{{question.answer1}}" class="form-check-input"> {{question.answer1|safe}} <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<input required value="{{ question.answer2 }}" type="radio" name="{{ question.id }}" id="{{question.answer2}}" class="form-check-input"> {{question.answer2|safe}} <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<input required value="{{ question.answer3 }}" type="radio" name="{{ question.id }}" id="{{question.answer3}}" class="form-check-input"> {{question.answer3|safe}} <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<input required value="{{ question.answer4 }}" type="radio" name="{{ question.id }}" id="{{question.answer4}}" class="form-check-input"> {{question.answer4|safe}} <br> <hr>
+            {% endfor %}
+            <button class="btn btn-primary" type="submit">Topshirish</button>
+        </form>
+    </div>
+</div>
+{% else %}
+<div class="card mt-3 mb-3">
+    <div class="card-body">
+        <span class="fs-3">Bu test sinovi hali chop etilmagan.</span>
+    </div>
+</div>
+{% endif %}
+{% endif %}
+{% endblock content %}

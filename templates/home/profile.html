@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+{% load algo %}
+{% load static %}
+{% block title %}{{profile.username}}{% endblock title %}
+
+{% block content %}
+<!-- <div class="content"> -->
+    <div class="row g-3">
+      <div class="col-lg-4 col-xl-3">
+        <div class="sticky-sidebar top-navbar-height">
+          <div class="card">
+            <div class="card-body">
+              <div class="row g-3 align-items-center">
+                <div class="col-md-6 col-lg-12 text-center"> <br>
+                  {% if profile.image %}
+                    <img class="" width="200" src="{{profile.image.url}}" alt="">
+                  {% else %}
+                   <span class="far fa-user fs-8"></span>
+                  {% endif %}
+                </div>
+                <div class="col-md-6 col-lg-12">
+                  <div class="row row-cols-1 g-0">
+                    <div class="col text-center">
+                        {% if profile.first_name and profile.last_name%}
+                          <h4>{{ profile.first_name }} {{profile.last_name}}</h4>
+                        {% else %}
+                            <h4>{{ profile.username }}</h4>
+                        {% endif %}
+                        {% if profile.edu %}
+                        <p class="mb-0 fs--1">{{ profile.edu|safe }}</p>
+                        {% else %}
+                        <p></p>
+                        {% endif %}
+                    </div>
+                    {% if user.id != profile.id %}
+                    <div class="col mt-4 mt-md-5 mt-lg-4 order-md-1 order-lg-0">
+                      <form action="{% url 'start' user.id profile.id %}" method="post">
+                        {% csrf_token %}
+                        <button class="btn btn-falcon-default btn-md mb-2 w-100" value="{{user.id}} {{profile.id}}" type="submit"><span class="fas fa-comment me-1"> </span>Xabar yozish</button>
+                      </form>
+                    </div>
+                    {% endif %}
+                    <div class="col mt-4 mt-md-5 mt-lg-4">
+                      <div class="row text-center">
+                        <div class="col-6">
+                          <!-- <img class="mb-2" src="{% static 'public/assets/img/icons/user-plus.svg' %}" width="30" alt="" /> -->
+                          <span class="fas fa-user"></span>
+                          <h4 class="text-700" data-countup='{"endValue":{{profile.rating}}}'>0</h4>
+                          <h6 class="fw-normal mb-0">Ball</h6>
+                        </div>
+                        <div class="col-6">
+                          <!-- <img class="mb-2" src="{% static 'public/assets/img/icons/users.svg' %}" width="30" alt="" /> -->
+                          <span class="fas fa-coins"></span>
+                          <h4 class="text-700" data-countup='{"endValue":{{profile.coins}}}'>0</h4>
+                          <h6 class="fw-normal mb-0">AlgoCoin</h6>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-8 col-xl-9">
+        <div class="card mb-2">
+          <div class="card-header bg-light">
+            {% if profile.city and profile.town %}
+              {% if "Qora" not in profile.city and "Tashkent sha" not in profile.city %}
+                {{profile.city|safe}} viloyati {{profile.town|safe}}
+              {% else %}
+              {{profile.city|safe}} {{profile.town|safe}}
+              {% endif %}
+            {% endif %}
+          </div>
+          <div class="card-body">
+            <div class="row flex-between-center">
+              <div class="col-xxl-9 text-1000">
+                {% if profile.bio %}
+                  <div class="tab-pane fade show active" id="pill-tab-info" role="tabpanel" aria-labelledby="info-tab">
+                    {{profile.bio|safe}}
+                  </div>
+                {% else %}
+                  .
+                {% endif %}
+              </div>
+              <div class="col-xxl-3 mt-4 mt-xxl-0 d-flex justify-content-center">
+                <ul class="list-unstyled mb-0 d-flex flex-wrap flex-xxl-column gap-3 justify-content-center">
+                  {% if profile.instagramlink %}
+                  <li>
+                    <a class="text-800 hover-primary hover-text-decoration-none" href="https://www.instagram.com/{{profile.instagramlink}}"><span class="fab fa-instagram"></span><span class="fw-semi-bold ms-2">Instagram</span></a>
+                  </li>
+                  {%endif %}
+                  {% if profile.telegramlink %}
+                  <li><a class="text-800 hover-primary hover-text-decoration-none" href="https://t.me/{{profile.telegramlink}}"><span class="fab fa-telegram"></span><span class="fw-semi-bold ms-2">Telegram</span></a></li>
+                  {% endif %}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <br>       
+        <div class="card">
+            <div class="card-body">
+              <center class="fw-bold fs-2">{{profile.id|count_solved_problems}}</center> <br>
+              {% for problem in problems %}
+                <a href="{% url 'problem' problem.id %}" data-bs-toggle="tooltip" data-bs-placement="top" title="{{problem.name}}" style="width: 50px; font-size: 9px;" class="btn btn-{{profile.id|check_problem_status:problem.id}} mb-2 fw-bold">{{ problem.id }}</a>
+              {% endfor %}
+            </div>
+        </div>
+
+        <div class="card mb-3 mt-4">
+          <div class="card-header bg-light">
+            <h5 class="mb-0" data-anchor="data-anchor">Harakatlar</h5>
+          </div>
+          <div class="card-body px-sm-4 px-md-8 px-lg-6 px-xxl-8">
+            <div class="timeline-vertical">
+              {% for timeline in timelines %}
+              {% if forloop.counter|isOdd %}
+              <div class="timeline-item timeline-item-start">
+                <div class="timeline-icon icon-item icon-item-lg text-primary border-300"><span class="fs-1 text-{{timeline.status}} fas fa-{{timeline.icon}}"></span></div>
+                <div class="row">
+                  <div class="col-lg-6 timeline-item-time">
+                    <div>
+                      <p class="fs--1 mb-0 fw-semi-bold">{{timeline.date}}</p>
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="timeline-item-content">
+                      <div class="timeline-item-card">
+                        <h5 class="mb-2 text-{{timeline.status}}">{{timeline.title}}</h5>
+                        <p class="fs--1 mb-0">{{timeline.body}}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% else %}
+              <div class="timeline-item timeline-item-end">
+                <div class="timeline-icon icon-item icon-item-lg text-primary border-300"><span class="fs-1 text-{{timeline.status}} fas fa-{{timeline.icon}}"></span></div>
+                <div class="row">
+                  <div class="col-lg-6 timeline-item-time">
+                    <div>
+                      <p class="fs--1 mb-0 fw-semi-bold">{{timeline.date}}</p>
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="timeline-item-content">
+                      <div class="timeline-item-card">
+                        <h5 class="mb-2 text-{{timeline.status}}">{{timeline.title}}</h5>
+                        <p class="fs--1 mb-0">{{timeline.body}}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+<!-- </div> -->
+<script src="{% static 'public/vendors/countup/countUp.umd.js' %}"></script>
+
+{% endblock content %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    p{
+        display: inline;
+    }
+</style>
+<div class="card">
+    {% if user.id == quiz.author.id %}
+    <div class="card-body">
+        <p class="fw-bold">Ishtirokchi {{ result.author }} ning <span class="text-info">{{result.quiz}}</span> testi natijasi:</p>
+        <p class="">To'plagan bali: {{rating}}</p>
+    </div>
+    {% else %}
+    <div class="card-body">
+        <p class="fw-bold">Ishtirokchi {{ result.author }} ning <span class="text-info">{{result.quiz}}</span> testi natijasi:</p> <br>
+        <p class="">To'plagan bali: {{result.rating}}</p> <br>
+        <br>
+        {{result.status|safe}}
+    </div>
+    {% endif %}
+</div>
+{% endblock content%}

@@ -1,0 +1,427 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Masala yaratish{% endblock title %}
+{% block content %}
+<div class="card mb-3">
+    <div class="card-header">
+        <center><h3 class="text-info fw-bold">Masala yaratish</h3></center>
+    </div>
+    <div class="card-body bg-light">
+        <div class="tab-component">
+            <div class="tab-pane preview-tab-pane active" role="tabpanel" aria-labelledby="tab-dom-81d0dc2f-eeb1-4dab-9b2a-6146c0346f42" id="dom-81d0dc2f-eeb1-4dab-9b2a-6146c0346f42">
+                <ul class="nav nav-pills" id="pill-myTab" role="tablist">
+                    <li class="nav-item"><a class="nav-link active" id="pill-doc-tab" data-bs-toggle="tab" href="#pill-tab-doc" role="tab" aria-controls="pill-tab-doc" aria-selected="true"><span class="fas fa-info"></span></a></li>
+                    <li class="nav-item"><a class="nav-link" id="pill-home-tab" data-bs-toggle="tab" href="#pill-tab-create" role="tab" aria-controls="pill-tab-create" aria-selected="false"><span class="fas fa-edit"></span></a></li>
+                    <li class="nav-item"><a class="nav-link" id="pill-preview-tab" data-bs-toggle="tab" href="#pill-tab-preview" role="tab" aria-controls="pill-tab-preview" aria-selected="false"><span onclick="preview()" class="fas fa-eye"></span></a></li>
+                </ul>
+                <div class="tab-content border p-3 mt-3" id="pill-myTabContent">
+                    <div class="tab-pane fade show active" id="pill-tab-doc" role="tabpanel" aria-labelledby="doc-tab">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <span style="font-size: 30px;" class="fas fa-info"></span>  <span class="text-danger">*</span> bor bo'limlarni to'ldirishingiz shart!
+                            </div>
+                        </div>
+                        <p> <span class="text-info fw-bold">Masala nomi</span> <span class="text-danger">*</span> - Yaratayotgan masalangizni nomi. Misol uchun: A+B</p>
+                        <p> <span class="text-info fw-bold">Masala matni</span> <span class="text-danger">*</span> - Yaratayotgan masalangizni sharti. Misol uchun: Sizga ikkita A va B butun sonlari beriladi. Ularning yig'indisini hisoblang.</p>
+                        <p> <span class="text-info fw-bold">Masala uchun izoh</span> - Yaratayotgan masalangiz shartiga izoh. Misol uchun: Birinchi testda 12+3=15</p>
+                        <p> <span class="text-info fw-bold">Masala vaqt chegarasi (ms)</span> <span class="text-danger">*</span> - Yaratayotgan masalangiz uchun vaqt chegarasi. Misol uchun: 1000</p>
+                        <p> <span class="text-info fw-bold">Masala xotira chegarasi (MB)</span> <span class="text-danger">*</span> - Yaratayotgan masalangiz uchun xatira chegarasi. Misol uchun: 16</p>
+                        <p> <span class="text-info fw-bold">Masala qiyinchiligi </span> <span class="text-danger">*</span> - Yaratayotgan masalangiz qiyinchilik darajasi. Misol uchun: 2</p>
+                        <p> <span class="text-info fw-bold">Masala kategoriyasi </span> <span class="text-danger">*</span> - Yaratayotgan masalangiz kategoriyasi(bir nechta tanlashingiz mumkin). Misol uchun: Oddiy, SonlarNazariyasi</p>
+                        <p> <span class="text-info fw-bold">Masalani yechish uchun tillar </span> <span class="text-danger">*</span> - Yaratayotgan masalangizni yechish mumkin bo'lgan dasturlash tillari(bir nechta tanlashingiz mumkin). Misol uchun: cpp, python, c, java</p>
+                        <p> <span class="text-info fw-bold">Masala kirish ma'lumotlari </span> - Yaratayotgan masalangizni kirivchi ma'lumotlari haqida ma'lumot(Default holatda: Kirish ma'lumotlari mavjud emas).  Misol uchun: Bitta qatorda A va B(0 <= A, B <= 10^18) butun sonlari beriladi.</p>
+                        <p> <span class="text-info fw-bold">Masala chiqish ma'lumotlari </span> - Yaratayotgan masalangizni chiquvchi ma'lumotlari haqida ma'lumot(Default holatda: Masala javobi).  Misol uchun: A va B sonlari yig'indisini.</p>
+                        <p> <span class="text-info fw-bold">Masala uchun simpletestlar</span> <span class="text-danger">*</span> - Yaratayotgan masalangiz uchun misol tariqasida keltirilgan testlar(<span class="text-danger">JSON formatida bo'lishi shart</span>). Misol uchun: {"12 3": "15", "23 6": "29"}</p>
+                        <p> <span class="text-info fw-bold">Masala testlari</span> <span class="text-danger">*</span> - Yaratayotgan masalangizni testlari(<span class="text-danger">JSON formatida bo'lishi shart</span>). Misol uchun: {"12 3": "15", "23 6": "29", "3 4": "7", "0 1": "1", "12 45", "57"}</p>
+                        
+                    </div>
+                    <div class="tab-pane fade show" id="pill-tab-create" role="tabpanel" aria-labelledby="home-tab">
+                        <form method="post">
+                            {% csrf_token %}
+                                {{ form.author }} 
+                                {{ form.contest }} 
+                            <div>
+                                <p class="text-info fw-bold">Masala nomi <span class="text-danger">*</span></p>
+                                {{ form.name }} <br>
+                            </div>
+                            <div class="form-floating mb-2">
+                                <p class="text-info fw-bold">Masala matni <span class="text-danger">*</span></p>
+                                {{ form.problem }} <br>
+                            </div>
+                            <div class="form-floating mb-2">
+                                <p class="text-info fw-bold">Masala uchun izox</p>
+                                {{ form.comment }}
+                            </div>
+
+                            <div class="form-floating mb-2">
+                                <p class="text-info fw-bold">Masala kategoriyasi</p>
+                                {{ form.category }}
+                            </div>
+                            <script>
+                                new MultiSelectTag('category', {
+                                    rounded: true,    // default true
+                                    shadow: true      // default false
+                                })
+
+function MultiSelectTag (el, customs = {shadow: false, rounded:true}) {
+var element = null
+var options = null
+var customSelectContainer = null
+var wrapper = null
+var btnContainer = null
+var body = null
+var inputContainer = null
+var inputBody = null
+var input = null
+var button = null
+var drawer = null
+var ul = null
+var domParser = new DOMParser()
+init()
+
+function init() {
+    element = document.getElementById(el)
+    createElements()
+    initOptions()
+    enableItemSelection()
+    setValues()
+
+    button.addEventListener('click', () => {
+        if(drawer.classList.contains('hidden')) {
+            initOptions()
+            enableItemSelection()
+            drawer.classList.remove('hidden')
+            input.focus()
+        }
+    })
+
+    input.addEventListener('keyup', (e) => {
+            initOptions(e.target.value)
+            enableItemSelection()
+    })
+
+    input.addEventListener('keydown', (e) => {
+        if(e.key === 'Backspace' && !e.target.value && inputContainer.childElementCount > 1) {
+            const child = body.children[inputContainer.childElementCount - 2].firstChild
+            const option = options.find((op) => op.value == child.dataset.value)
+            option.selected = false
+            removeTag(child.dataset.value)
+            setValues()
+        }
+        
+    })
+    
+    window.addEventListener('click', (e) => {   
+        if (!customSelectContainer.contains(e.target)){
+            drawer.classList.add('hidden')
+        }
+    });
+
+}
+
+function createElements() {
+    // Create custom elements
+    options = getOptions();
+    element.classList.add('hidden')
+    
+    // .multi-select-tag
+    customSelectContainer = document.createElement('div')
+    customSelectContainer.classList.add('mult-select-tag')
+
+    // .container
+    wrapper = document.createElement('div')
+    wrapper.classList.add('wrapper')
+
+    // body
+    body = document.createElement('div')
+    body.classList.add('body')
+    if(customs.shadow) {
+        body.classList.add('shadow')
+    }
+    if(customs.rounded) {
+        body.classList.add('rounded')
+    }
+    
+    // .input-container
+    inputContainer = document.createElement('div')
+    inputContainer.classList.add('input-container')
+
+    // input
+    input = document.createElement('input')
+    input.classList.add('input')
+    input.placeholder = `${customs.placeholder || 'Qidirish...'}`
+
+    inputBody = document.createElement('inputBody')
+    inputBody.classList.add('input-body')
+    inputBody.append(input)
+
+    body.append(inputContainer)
+
+    // .btn-container
+    btnContainer = document.createElement('div')
+    btnContainer.classList.add('btn-container')
+
+    // button
+    button = document.createElement('button')
+    button.type = 'button'
+    btnContainer.append(button)
+
+    const icon = domParser.parseFromString(`<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 21 6 15"></polyline></svg>`, 'image/svg+xml').documentElement
+    button.append(icon)
+
+
+    body.append(btnContainer)
+    wrapper.append(body)
+
+    drawer = document.createElement('div');
+    drawer.classList.add(...['drawer', 'hidden'])
+    if(customs.shadow) {
+        drawer.classList.add('shadow')
+    }
+    if(customs.rounded) {
+        drawer.classList.add('rounded')
+    }
+    drawer.append(inputBody)
+    ul = document.createElement('ul');
+    
+    drawer.appendChild(ul)
+
+    customSelectContainer.appendChild(wrapper)
+    customSelectContainer.appendChild(drawer)
+
+    // Place TailwindTagSelection after the element
+    if (element.nextSibling) {
+        element.parentNode.insertBefore(customSelectContainer, element.nextSibling)
+    }
+    else {
+        element.parentNode.appendChild(customSelectContainer);
+    }
+}
+
+function initOptions(val = null) {
+    ul.innerHTML = ''
+    for (var option of options) {
+        if (option.selected) {
+            !isTagSelected(option.value) && createTag(option)
+        }
+        else {
+            const li = document.createElement('li')
+            li.innerHTML = option.label
+            li.dataset.value = option.value
+            
+            // For search
+            if(val && option.label.toLowerCase().startsWith(val.toLowerCase())) {
+                ul.appendChild(li)
+            }
+            else if(!val) {
+                ul.appendChild(li)
+            }
+        }
+    }
+}
+
+function createTag(option) {
+    // Create and show selected item as tag
+    const itemDiv = document.createElement('div');
+    itemDiv.classList.add('item-container');
+    const itemLabel = document.createElement('div');
+    itemLabel.classList.add('item-label');
+    itemLabel.innerHTML = option.label
+    itemLabel.dataset.value = option.value 
+    const itemClose = new DOMParser().parseFromString(`<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="item-close-svg"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`, 'image/svg+xml').documentElement
+
+    itemClose.addEventListener('click', (e) => {
+        const unselectOption = options.find((op) => op.value == option.value)
+        unselectOption.selected = false
+        removeTag(option.value)
+        initOptions()
+        setValues()
+    })
+
+    itemDiv.appendChild(itemLabel)
+    itemDiv.appendChild(itemClose)
+    inputContainer.append(itemDiv)
+}
+
+function enableItemSelection() {
+    // Add click listener to the list items
+    for(var li of ul.children) {
+        li.addEventListener('click', (e) => {
+            options.find((o) => o.value == e.target.dataset.value).selected = true
+            input.value = null
+            initOptions()
+            setValues()
+            input.focus()
+        })
+    }
+}
+
+function isTagSelected(val) {
+    // If the item is already selected
+    for(var child of inputContainer.children) {
+        if(!child.classList.contains('input-body') && child.firstChild.dataset.value == val) {
+            return true
+        }
+    }
+    return false
+}
+function removeTag(val) {
+    // Remove selected item
+    for(var child of inputContainer.children) {
+        if(!child.classList.contains('input-body') && child.firstChild.dataset.value == val) {
+            inputContainer.removeChild(child)
+        }
+    }
+}
+function setValues() {
+    // Update element final values
+    for(var i = 0; i < options.length; i++) {
+        element.options[i].selected = options[i].selected
+    }
+ 
+}
+function getOptions() {
+    // Map element options
+    return [...element.options].map((op) => {
+        return {
+            value: op.value,
+            label: op.label,
+            selected: op.selected,
+        }
+    })
+}
+}
+                            </script>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <p class="text-info fw-bold">Masala vaqt chegarasi (ms) <span class="text-danger">*</span></p>
+                                    {{ form.timelimit }}
+                                </div>
+                                <div class="col-md-4">
+                                    <p class="text-info fw-bold">Masala xotira chegarasi (MB) <span class="text-danger">*</span></p>
+                                    {{ form.memorylimit }} <br>
+                                </div>
+                                <div class="col-md-4">
+                                    <p class="text-info fw-bold">Masala qiyinchiligi <span class="text-danger">*</span></p>
+                                    {{ form.difficulty }} <br>
+                                </div>
+                            </div>
+                            <div class="">
+                                <p class="text-info fw-bold">Masala kirish ma'lumotlari</p>
+                                {{ form.infoin }} <br>
+                            </div>
+                            <div class="">
+                                <p class="text-info fw-bold">Masala chiqish ma'lumotlari</p>
+                                {{ form.infoout }} <br>
+                            </div>
+                            <div class="">
+                                <p class="text-info fw-bold">Masala uchun simpletestslar <span class="text-danger">*</span></p>
+                                {{ form.simpletests }} <br>
+                            </div>
+                            <div class="">
+                                <p class="text-info fw-bold">Masala testlari <span class="text-danger">*</span></p>
+                                {{ form.tests }} <br>
+                            </div>
+                            <div class="">
+                                <p class="text-info fw-bold">Masala yechimi</p>
+                                {{ form.solution }} <br>
+                            </div>
+                            <button type="submit" class="btn btn-falcon-primary">Yaratish</button>
+                        </form>
+                    </div>
+                    <div class="tab-pane fade" id="pill-tab-preview" role="tabpanel" aria-labelledby="preview-tab">
+                        <center><p id="problem-name">Masala nomi</p></center>
+                        <center>
+                            <span class="badge badge rounded-pill badge-soft-success">TimeLimit: <span id="problem-timelimit">1000ms</span> </span>
+                            <span class="badge badge rounded-pill badge-soft-info">MemoryLimit: <span id="problem-memorylimit">16MB</span> </span>
+                            <span class="badge badge rounded-pill badge-soft-primary">Qiyinchiligi: <span id="problem-difficulty">10%</span> </span>
+                            <span class="badge badge rounded-pill badge-soft-primary">Category: <span id="problem-category"></span> </span>
+                        </center>
+                        <hr>
+                        <p class="badge badge rounded-pill badge-soft-info">Muallif: <span id="problem-author">ali</span></p>
+                        <p id="problem-problem"></p> <hr>
+                        <span class="text-info" >Kirish ma'lumotlari:</span> <span id="problem-infoin"></span><hr>
+                        <span class="text-info" >Chiqish ma'lumotlari:</span> <span id="problem-infoout"></span> <hr>
+                        <span class="text-info" >Izox:</span> <span id="problem-comment"></span> <hr>
+                        <table class="table table-hover overflow-hidden">
+                            <tr style="border: 0.5px solid #ccc;">
+                                <td style="border: 0.5px solid #ccc;">#</td>
+                                <td style="border: 0.5px solid #ccc;">Kirish oqimi</td>
+                                <td style="border: 0.5px solid #ccc;">Chiqish oqimi</td>
+                            </tr>
+                            <tr style="border: 0.5px solid #ccc;">
+                                <td style="border: 0.5px solid #ccc;">1</td>
+                                <td id="in1" style="border: 0.5px solid #ccc;">1 2</td>
+                                <td id="in2" style="border: 0.5px solid #ccc;">3</td>
+                            </tr>
+                            <tr style="border: 0.5px solid #ccc;">
+                                <td style="border: 0.5px solid #ccc;">2</td>
+                                <td id="out1" style="border: 0.5px solid #ccc;">2 3</td>
+                                <td id="out2" style="border: 0.5px solid #ccc;">5</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    let author1 = "{{ user.id }}";
+    document.getElementById("author").value = author1;
+
+    let contest1 = "{{contest.id}}";
+    console.log(contest1)
+    document.getElementById("contest").value = contest1;
+
+    const htmlDecode = (input) => {
+    const doc = new DOMParser().parseFromString(input, "text/html");
+    return doc.documentElement.textContent;
+    }
+
+    function preview(){
+        let author = document.getElementById("author");
+    let name = document.getElementById("name");
+    let problem = document.getElementById("problem");
+    let comment = document.getElementById("comment");
+    let infoin = document.getElementById("infoin");
+    let infoout = document.getElementById("infoout");
+    let timelimit = document.getElementById("timelimit");
+    let memorylimit = document.getElementById("memorylimit");
+    let difficulty = document.getElementById("difficulty");
+    let category = document.getElementById("category");
+    let simpletests = document.getElementById("simpletests");
+    let tests = document.getElementById("tests");
+    let send = document.getElementById("send");
+
+    let problem_author = document.getElementById("problem-author");
+    let problem_name = document.getElementById("problem-name");
+    let problem_problem = document.getElementById("problem-problem");
+    let problem_comment = document.getElementById("problem-comment");
+    let problem_infoin = document.getElementById("problem-infoin");
+    let problem_infoout = document.getElementById("problem-infoout");
+    let problem_timelimit = document.getElementById("problem-timelimit");
+    let problem_memorylimit = document.getElementById("problem-memorylimit");
+    let problem_difficulty = document.getElementById("problem-difficulty");
+    let problem_category = document.getElementById("problem-category");
+    let problem_simpletests = document.getElementById("problem-simpletests");
+    let problem_tests = document.getElementById("problem-tests");
+    console.log(inout)
+        problem_name.textContent = name.value;
+        problem_author.textContent = author.value;
+        let plm = htmlDecode(problem.value);
+        let infoi = htmlDecode(infoin.value);
+        let infoo = htmlDecode(infoout.value);
+        let comm = htmlDecode(comment.value);
+        problem_problem.textContent = plm;
+        problem_infoin.textContent = infoi;
+        problem_infoout.textContent = infoo;
+        problem_timelimit.textContent = `${timelimit.value}ms`;
+        problem_memorylimit.textContent = `${memorylimit.value}MB`;
+        problem_difficulty.textContent = `${difficulty.value}%`;
+        problem_comment.textContent = comm;
+    }
+
+</script>
+<script src="{% static 'public/vendors/tinymce/tinymce.min.js' %}"></script>
+{% endblock content %}

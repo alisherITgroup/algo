@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}{{contest.name}} natijalari{% endblock title %}
+{% load static %}
+{% load algo %}
+{% block content %}
+<div class="card mt-3">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table">
+                <tr style="border: 1px solid #ccc;">
+                    <td style="border: 1px solid #ccc;">#</td>
+                    <td style="border: 1px solid #ccc;">Ishtirokchi</td>
+                    <td style="border: 1px solid #ccc;">Rating</td>
+                    {% for problem in problems %}
+                        <td style="border: 1px solid #ccc;">{{problem}}</td>
+                    {% endfor %}
+                </tr>
+                {% for result in results %}
+                    {% if user.id == result.author.id %}
+                    <tr>
+                        <td class="bg-success" style="border: 1px solid #ccc;">{{forloop.counter}}</td>
+                        <td class="bg-success" style="border: 1px solid #ccc;">{{ result.author}}</td>
+                        <td class="bg-success" style="border: 1px solid #ccc;">{{ result.rating}}</td>
+                        {% for problem in problems %}
+                            {{problem|td:result.status|safe}}
+                        {% endfor %}
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td style="border: 1px solid #ccc;">{{forloop.counter}}</td>
+                        <td style="border: 1px solid #ccc;">{{ result.author}}</td>
+                        <td style="border: 1px solid #ccc;">{{ result.rating}}</td>
+                        {% for problem in problems %}
+                            {{problem|td:result.status|safe}}
+                        {% endfor %}
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock content %}

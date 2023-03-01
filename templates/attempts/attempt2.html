@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load algo %}
+{% load static %}
+{% block title %}{{attempt.problem.name}}{% endblock title %}
+{% block content %}
+<div class="card mt-3">
+    <div class="card-body">
+        <div class="table-responsive scroll">
+            <table class="table">
+                <tr style="border: 0.1px solid #ccc">
+                    <td style="border: 0.1px solid #ccc">#</td>
+                    <td style="border: 0.1px solid #ccc">Masala</td>
+                    <td style="border: 0.1px solid #ccc">Holati</td>
+                    <td style="border: 0.1px solid #ccc">Vaqt</td>
+                    <td style="border: 0.1px solid #ccc">Til</td>
+                    <td style="border: 0.1px solid #ccc">Sana</td>
+                </tr>
+                <tr style="border: 0.1px solid #ccc">
+                    <td style="border: 0.1px solid #ccc">{{ attempt.id }}</td>
+                    <td style="border: 0.1px solid #ccc">{{ attempt.problem.name }}</td>
+                    {% if "Acc" in attempt.status %}
+                    <td style="border: 0.1px solid #ccc" class="text-success fw-bold">{{ attempt.status }}</td>
+                    {% else %}
+                        <td style="border: 0.1px solid #ccc" class="text-danger fw-bold">{{ attempt.status }}</td>
+                    {% endif %}
+                    <td style="border: 0.1px solid #ccc">{{attempt.time}}</td>
+                    <td style="border: 0.1px solid #ccc">{{attempt.language}}</td>
+                    <td style="border: 0.1px solid #ccc">{{attempt.date}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<br>
+<pre>
+    <code class="language-{{attempt.language}}">
+{{attempt.code}}</code>
+</pre> <br>
+<div class="accordion" id="accordionExample">
+    {{ attempt.id|cases2|safe }}
+  </div>     
+{% endblock content %}

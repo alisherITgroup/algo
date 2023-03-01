@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}Test siovi yaratis{% edblock title %}
+{% load static %}
+{% block content %}
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+{% if user.id == quiz.author.id %}
+<div class="card mb-3">
+    <div class="card-header">
+        <center><h3 class="text-info fw-bold">Savol yaratish</h3></center>
+    </div>
+    <div class="card-body bg-light">
+        <div class="tab-component">
+            <div class="tab-pane preview-tab-pane active" role="tabpanel" aria-labelledby="tab-dom-81d0dc2f-eeb1-4dab-9b2a-6146c0346f42" id="dom-81d0dc2f-eeb1-4dab-9b2a-6146c0346f42">
+                <ul class="nav nav-pills" id="pill-myTab" role="tablist">
+                    <li class="nav-item active"><a class="nav-link active" id="pill-home-tab" data-bs-toggle="tab" href="#pill-tab-create" role="tab" aria-controls="pill-tab-create" aria-selected="true"><span class="fas fa-edit"></span></a></li>
+                </ul>
+                <div class="tab-content border p-3 mt-3" id="pill-myTabContent">
+                    <div class="tab-pane fade show active" id="pill-tab-create" role="tabpanel" aria-labelledby="home-tab">
+                        <form method="post">
+                            {% csrf_token %}
+                            {{form.quiz}} <br>
+                            <label for="quiz_author">Savol <span class="text-danger">*</span></label>
+                            <!-- <textarea name="question" id="question" class="tinymce"></textarea> <br> -->
+                            {{form.question}} <br>
+                            <label for="quiz_name">Javob 1<span class="text-danger">*</span></label>
+                            <!-- <textarea name="answer1" id="answer1" class="tinymce"></textarea> <br> -->
+                            {{form.answer1}} <br>
+                            <label for="quiz_name">Javob 2<span class="text-danger">*</span></label>
+                            <!-- <textarea name="answer1" id="answer1" class="tinymce"></textarea> <br> -->
+                            {{form.answer2}} <br>
+                            <label for="quiz_name">Javob 3<span class="text-danger">*</span></label>
+                            <!-- <textarea name="answer1" id="answer1" class="tinymce"></textarea> <br> -->
+                            {{form.answer3}} <br>
+                            <label for="quiz_name">Javob 4<span class="text-danger">*</span></label>
+                            <!-- <textarea name="answer1" id="answer1" class="tinymce"></textarea> <br> -->
+                            {{form.answer4}} <br>
+                            <label for="quiz_name">To'g'ri javob<span class="text-danger">*</span></label>
+                            <!-- <textarea name="answer1" id="answer1" class="tinymce"></textarea> <br> -->
+                            {{form.true}} <br>
+                            <label for="quiz_isPublic">Savol yechimi uchun beriladigan ball <span class="text-danger">*</span></label>
+                            <!-- <input class="form-control" type="number" name="level" id=""> <br> -->
+                            {{form.level}} <br>
+                            <button type="submit" class="btn btn-falcon-primary">Yaratish</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="row mt-3">
+    <div class="card col-md-12">
+        <div class="card-body">
+            <center><p class="fw-black lh-1 text-300 fs-error">404</p></center>
+            <center>
+                <p class="lead mt-4 text-800 mx-auto fw-bold">Afsus! Siz izlayotgan sahifa topilmadi!</p>
+            </center>
+            <hr>
+            <center>
+                <p class="lead mt-4 text-800 mx-auto">Bu sahifa mavjud emas yoki siz uchun yopib qo'yilgan bo'lishi mumkin.</p>
+            </center>
+            <center>
+                <a class="btn btn-falcon-info" href="{% url 'home' %}"><span class="fas fa-home"></span> Bosh sahifa</a>
+            </center>
+        </div>
+    </div>
+</div>
+{% endif %}
+<script>
+    document.getElementById("quiz").value = "{{quiz.id}}"
+</script>
+<script src="{% static 'public/vendors/tinymce/tinymce.min.js' %}"></script>
+{% endblock content%}

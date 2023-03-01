@@ -1,0 +1,334 @@
+{% extends "base.html" %}
+{% block title %}Profileni tahrirlash{% endblock title %}
+{% block content %}
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+
+{% if profile.id == user.id or user.is_superuser %}
+<div class="row g-0">
+    <div class="mt-3 col-lg-12 pe-lg-2">
+        <div class="card mt-3">
+            <div class="card-header">
+                <center>
+                    <span class="text-info fw-bold fs-2">Shaxsiy ma'lumotlar</span>
+                </center>
+            </div>
+            <div class="card-body">
+                <form method="post" class="row g-3" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% if user.is_superuser %}
+                    <div class="col-md-6">
+                        <label for="telegramlink">O'qituvchi</label>
+                        {{ form.isTeacher }}
+                    </div>
+                    <div class="col-md-6">
+                        <label for="instagramlink">Expert</label>
+                        {{ form.isExpert }}
+                    </div>
+                    {% endif %}
+                    <label for="image">Profile rasmi</label>
+                    {{form.image}}
+                    <div class="col-md-6">
+                        <label for="username">Foydalanuvchi nomi</label>
+                        {{ form.username }}
+                    </div>
+                    <div class="col-md-6">
+                        <label for="last_name">Email</label>
+                        {{ form.email }}
+                    </div>
+                    <div class="col-md-6">
+                        <label for="first_name">Ism</label>
+                        {{ form.first_name }}
+                    </div>
+                    <div class="col-md-6">
+                        <label for="last_name">Familiya</label>
+                        {{ form.last_name }}
+                    </div>
+                    <div class="col-md-4">
+                        <label for="first_name">Mamlakat</label>
+                        {{ form.country }}
+                    </div>
+                    <div class="col-md-4">
+                        <label for="last_name">Shahar({{profile.city}})</label>
+                        {{ form.city }}
+                        <option value="" id="option"></option>
+                    </div>
+                    <script>
+                        let sub = {
+                            "Andijon": [
+                                "Andijon shahri", 
+                                "Andijon tumani", 
+                                "Asaka tumani", 
+                                "Baliqchi tumani", 
+                                "Bo'z tumani", 
+                                "Buloqboshi tumani", 
+                                "Izboskan tumani", 
+                                "Jalolquduq tumani", 
+                                "Marhamat tumani", 
+                                "Oltinko'l tumani", 
+                                "Paxtaobod tumani", 
+                                "Qo'rg'ontepa tumani", 
+                                "Shahrixon tumani", 
+                                "Ulug'nor tumani", 
+                                "Xajaobod tumani", 
+                                "Xonobod tumani"],
+                            "Buxoro": [
+                                "Buxoro tumani", 
+                                "G'ijduvon tumani", 
+                                "Jondor tumani", 
+                                "Kogon tumani", 
+                                "Olot tumani", 
+                                "Peshku tumani", 
+                                "Qarako'l tumani", 
+                                "Qorovulbozor tumani", 
+                                "Romitan tumani", 
+                                "Shofirkon tumani", 
+                                "Vobkent tumani"],
+                            "Farg'ona": [
+                                "Bag'dod tumani", 
+                                "Beshariq tumani", 
+                                "Buvayd tumani", 
+                                "Dang'ara tumani", 
+                                "Farg'ona tumani", 
+                                "Furqat tumani", 
+                                "O'zbekiston tumani", 
+                                "Oltiariq tumani", 
+                                "Qo'shtepa tumani", 
+                                "Quva tumani", 
+                                "Quvasoy tumani", 
+                                "Rishton tumani", 
+                                "So'z tumani", 
+                                "Toshloq tumani", 
+                                "Uchko'prik tumani", 
+                                "Yozvon tumani"],
+                            "Jizzax": [
+                                "Arnasoy tumani",
+                                "Baxmal tumani",
+                                "Do'stlik tumani",
+                                "Forish tumani",
+                                "G'allaorol tumani",
+                                "Mirzacho'l tumani",
+                                "Paxtakor tumani",
+                                "Sharof Rashidov tumani",
+                                "Yangiobod tumani",
+                                "Zafarobod tumani",
+                                "Zarbdor tumani",
+                                "Zomin tumani"
+                            ],
+                            "Namangan": [
+                                "Chortoq tumani",
+                                "Chust tumani",
+                                "Kosonsoy tumani",
+                                "Mingbuloq tumani",
+                                "Namangan tumani",
+                                "Norin tumani",
+                                "Pop tumani",
+                                "To'raqo'rg'on tumani",
+                                "Uchqo'rg'on tumani",
+                                "Uychi tumani",
+                                "Yangiqo'rg'on tumani"
+                            ],
+                            "Navoiy": [
+                                "Karmana tumani",
+                                "Konimex tumani",
+                                "Navbahor tumani",
+                                "Nurota tumani",
+                                "Qiziltepa tumani",
+                                "Tomdi tumani",
+                                "Uchquduq tumani",
+                                "Xatirchi tumani"
+                            ],
+                            "Qashqadaryo": [
+                                "Chiroqchi tumani",
+                                "Dehqonobod tumani",
+                                "G'uzor tumani",
+                                "Kasbi tumani",
+                                "Kitob tumani",
+                                "Ko'kdala tumani",
+                                "Koson tumani",
+                                "Mirishkor tumani",
+                                "Muborak tumani",
+                                "Nishon tumani",
+                                "Qamashi tumani",
+                                "Qarshi tumani",
+                                "Shahrisabz tumani",
+                                "Yakkabog' tumani"
+                            ],
+                            "Qoraqalpog'iston Respublikasi": [
+                                "Amudaryo tumani",
+                                "Beruniy tumani",
+                                "Chimbor tumani",
+                                "Ellikqal'a tumani",
+                                "Kegeyli tumani",
+                                "Mo'ynoq tumani",
+                                "Nukus tumani",
+                                "Qanliko'l tumani",
+                                "Qo'ng'irot tumani",
+                                "Qorao'zak tumani",
+                                "Shumanay tumani",
+                                "Taxtako'pir tumani",
+                                "To'rtko'l tumani",
+                                "Xo'jayli tumani",
+                                "Taxiatosh tumani",
+                                "Bo'zatov tumani"
+                            ],
+                            "Samarqand": [
+                                "Bulung'ur tumani",
+                                "Ishtixon tumani",
+                                "Jomboy tumani",
+                                "Kattaqo'rg'on tumani",
+                                "Narpay tumani",
+                                "Nurobod tumani",
+                                "Oqdaryo tumani",
+                                "Pastdarg'om tumani",
+                                "Paxtachi tumani",
+                                "Payariq tumani",
+                                "Qo'shrabot tumani",
+                                "Samarqand tumani",
+                                "Toyloq tumani",
+                                "Urgut tumani"
+                            ],
+                            "Sirdayo": [
+                                "Boyovut tumani",
+                                "Guliston shahri",
+                                "Guliston tumani",
+                                "Mirzaobod tumani",
+                                "Oqoltin tumani",
+                                "Sardoba tumani",
+                                "Sayxunobod tumani",
+                                "Sirdaryo tumani",
+                                "Xovos tumani",
+                                "Yangiyer shahri",
+                            ],
+                            "Surxondaryo": [
+                                "Angor tumani",
+                                "Boysun tumani",
+                                "Denov tumani",
+                                "Jarqo'rg'on tumani",
+                                "Muzrabot tumani",
+                                "Oltinsoy tumani",
+                                "Qiziriq tumani",
+                                "Qumqo'rg'on tumani",
+                                "Sarosiyo tumani",
+                                "Sherobod tumani",
+                                "Sho'rchi tumani",
+                                "Termiz tumani",
+                                "Uzun tumani",
+                            ],
+                            "Toshkent": [
+                                "Bekobod tumani",
+                                "Bo'ka tumani",
+                                "Bo'stonliq tumani",
+                                "Chinoz tumani",
+                                "Ohangaron tumani",
+                                "O'rta Chirchiq tumani",
+                                "Oqqo'rg'on tumani",
+                                "Parkent tumani",
+                                "Piskent tumani",
+                                "Qibray tumani",
+                                "Quyi Chirchiq tumani",
+                                "Yangiyo'l tumani",
+                                "Yuqori Chirchiq tumani",
+                                "Zangiota tumani"
+                            ],
+                            "Toshkent shahri": [
+                                "Bektemir tumani",
+                                "Chilonzor tumani",
+                                "Hamza tumani",
+                                "Mirobod tumani",
+                                "Mirzo Ulug'bek tumani", 
+                                "Olmazor tumani",
+                                "Sergeli tumani",
+                                "Shayxontohur tumani",
+                                "Uchtepa tumani",
+                                "Yakkasaroy tumani",
+                                "Yangihayot tumani",
+                                "Yunusobod tumani"
+                            ]
+                            
+                        }
+                        window.onload = function(){
+                            let city = document.getElementById("city");
+                            let town = document.getElementById("town");
+                            let option = document.getElementById("option");
+                            option.value = "{{user.city}}"
+                            option.innerHTML = "{{user.city}}"
+                            city.appendChild(option);
+                            let option2 = document.getElementById("option2");
+                            option2.value = "{{user.town}}"
+                            option2.innerHTML = "{{user.town}}"
+                            town.appendChild(option2);
+                            for(let x in sub){
+                                city.options[city.options.length] = new Option(x);
+                            }
+
+                            city.onchange = function(){
+                                town.length = 1;
+                                let z = sub[city.value];
+                                console.log(z)
+                                for(let i=0; i<z.length; i++){
+                                    town.options[town.options.length] = new Option(z[i]);
+                                }
+                            }
+                        }
+                    </script>
+                    <div class="col-md-4">
+                        <label for="last_name">Tuman({{profile.town}})</label>
+                        {{ form.town }}
+                        <option value="" id="option2"></option>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="last_name">Jinsi</label>
+                        {{ form.gender }}
+                    </div>
+                    <div class="col-md-6">
+                        <label for="last_name">O'qish joyi</label>
+                        {{ form.edu }}
+                    </div>
+                    <div class="col-md-12">
+                        <label for="bio">Ma'lumot</label>
+                        {{ form.bio }}
+                    </div>
+                    <div class="col-md-6">
+                        <label for="telegramlink">Telegram</label>
+                        {{ form.telegramlink }}
+                    </div>
+                    <div class="col-md-6">
+                        <label for="instagramlink">Instagram</label>
+                        {{ form.instagramlink }}
+                    </div>
+                    <div class="col-12 d-flex justify-content-end">
+                        <button type="submit" class="btn btn-falcon-primary">Saqlash</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="row mt-3">
+    <div class="card col-md-12">
+        <div class="card-body">
+            <center><p class="fw-black lh-1 text-300 fs-error">404</p></center>
+            <center>
+                <p class="lead mt-4 text-800 mx-auto fw-bold">Afsus! Siz izlayotgan sahifa topilmadi!</p>
+            </center>
+            <hr>
+            <center>
+                <p class="lead mt-4 text-800 mx-auto">Bu sahifa mavjud emas yoki siz uchun yopib qo'yilgan bo'lishi mumkin.</p>
+            </center>
+            <center>
+                <a class="btn btn-falcon-info" href="{% url 'home' %}"><span class="fas fa-home"></span> Bosh sahifa</a>
+            </center>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock content %}

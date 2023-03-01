@@ -1,0 +1,232 @@
+{% extends "base.html" %}
+{% load static %}
+{% load algo %}
+{% block title %}{{ contest.name }}{% endblock title %}
+
+{% block content %}
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+{% if  isAbonent or user.is_superuser %}
+<div class="card mb-3">
+    <div class="card-header">
+        <h3>{{ contest.name }}
+            {% if constat == 'started' %}
+            <span class="text-success">#o'tkazilmoqda</span>
+            {% elif constat == 'notstarted' %}
+            <span class="text-info">#boshlanmagan</span>
+            {% else %}
+            <span class="text-danger">#tugagan</span>
+            {% endif %}
+        </h3>
+    </div>
+    <div class="card-body">
+        <ul class="nav nav-pills" id="pill-myTab" role="tablist">
+            <li class="nav-item"><a class="nav-link active fw-bold" id="pill-info-tab" data-bs-toggle="tab" href="#pill-tab-info" role="tab" aria-controls="pill-tab-info" aria-selected="true"><span class="fas fa-info"></span> Musobaqa haqida</a></li>
+            {% if user.id == contest.author.id or user.is_superuser or contest.id|is_adder:user.id %}
+            <li class="nav-item"><a class="nav-link fw-bold" id="pill-add-tab" data-bs-toggle="tab" href="#pill-tab-add" role="tab" aria-controls="pill-tab-add" aria-selected="false"><span class="fas fa-plus"></span> Masala qo'shish</a></li> 
+            {% endif %}
+            {% if contest.id|contest_status == 'started' %}
+            <li class="nav-item"><a class="nav-link fw-bold" id="pill-problems-tab" data-bs-toggle="tab" href="#pill-tab-problems" role="tab" aria-controls="pill-tab-problems" aria-selected="false"><span class="fas fa-list"></span> Masalalar</a></li>
+            {% endif %}
+            {% if contest.author.id == user.id or user.is_superuser%}
+            <li class="nav-item">
+                <a title="{{contest.name}} ni tahrirlash" href="{% url 'edit_contest' contest.id %}" class="nav-link fw-bold"><span class="fas fa-edit"></span></a>
+            </li>
+            {% endif %}
+            <li class="nav-item"><a class="nav-link fw-bold">
+                <div class="d-flex align-items-center">
+                    <div class="fw-bold" id="day">0</div>&nbsp;:&nbsp;
+                    <div class="fw-bold" id="hour">0</div>&nbsp;:&nbsp;
+                    <div class="fw-bold" id="minute">0</div>&nbsp;:&nbsp;
+                    <div class="fw-bold" id="second">0</div>
+                </div>
+            </a></li>
+          </ul>
+          <div class="tab-content border p-3 mt-3" id="pill-myTabContent">
+            <div class="tab-pane fade show active" id="pill-tab-info" role="tabpanel" aria-labelledby="info-tab">
+                <p class="fw-bold text-info">{{ contest.description|safe }}</p>
+                {% if contest.id|contest_status == 'notstarted' %}
+                <script>
+                    console.log("{{ contest.startdate }} {{ contest.starttime }}")
+                    const countdown = () => {
+                        const countDate = new Date('{{ contest.startdate }} {{ contest.starttime }}:00').getTime();
+                        const now = new Date().getTime();
+                        const gap = countDate - now;
+
+                        const second = 1000;
+                        const minute = second*60;
+                        const hour = minute*60;
+                        const day = hour*24;
+
+                        const textday = Math.floor(gap / day);
+                        const textHour = Math.floor((gap % day) / hour);
+                        const textMinute = Math.floor((gap % hour) / minute);
+                        const textSecond = Math.floor((gap % minute) / second);
+                        
+                        if (parseInt(textday) > -1){
+                            document.getElementById("day").innerText = textday;
+                            document.getElementById("hour").innerText = textHour;
+                            document.getElementById("minute").innerText = textMinute;
+                            document.getElementById("second").innerText = textSecond;
+                        }
+
+                    }
+                    setInterval(countdown, 1000)
+                </script>
+                {% elif contest.id|contest_status == 'started' %}
+                <script>
+                    console.log("{{ contest.enddate }} {{ contest.endtime }}")
+                    const countdown2 = () => {
+                        const countDate = new Date('{{ contest.enddate }} {{ contest.endtime }}:00').getTime();
+                        const now = new Date().getTime();
+                        const gap = countDate - now;
+
+                        const second = 1000;
+                        const minute = second*60;
+                        const hour = minute*60;
+                        const day = hour*24;
+
+                        const textday = Math.floor(gap / day);
+                        const textHour = Math.floor((gap % day) / hour);
+                        const textMinute = Math.floor((gap % hour) / minute);
+                        const textSecond = Math.floor((gap % minute) / second);
+                        
+                        if (parseInt(textday) > -1){
+                            document.getElementById("day").innerText = textday;
+                            document.getElementById("hour").innerText = textHour;
+                            document.getElementById("minute").innerText = textMinute;
+                            document.getElementById("second").innerText = textSecond;
+                        }
+
+                    }
+                    setInterval(countdown2, 1000)
+                </script>
+                {% endif %}
+                <p></p>
+                <div class="table-responsive">
+                    <table class="table table-hover overflow-hidden">
+                        <tr style="border: 0.5px solid #ccc;">
+                            <td style="border: 0.5px solid #ccc;">Boshlanish vaqti</td>
+                            <td style="border: 0.5px solid #ccc;">{{ contest.startdate }} {{ contest.starttime }}</td>
+                        </tr>
+                        <tr style="border: 0.5px solid #ccc;">
+                            <td style="border: 0.5px solid #ccc;">Tugash vaqti</td>
+                            <td style="border: 0.5px solid #ccc;">{{ contest.enddate }} {{ contest.endtime }}</td>
+                        </tr>
+                        <tr style="border: 0.5px solid #ccc;">
+                            <td style="border: 0.5px solid #ccc;">Muallif</td>
+                            <td style="border: 0.5px solid #ccc;">{{ contest.author }}</td>
+                        </tr>
+                        <tr style="border: 0.5px solid #ccc;">
+                            <td style="border: 0.5px solid #ccc;">Masalalar mualliflari</td>
+                            <td style="border: 0.5px solid #ccc;">{{ authors }}</td>
+                        </tr>
+                        <tr style="border: 0.5px solid #ccc;">
+                            <td style="border: 0.5px solid #ccc;">Languages</td>
+                            <td style="border: 0.5px solid #ccc;">{{ langs|safe }}</td>
+                        </tr>
+                        <tr style="border: 0.5px solid #ccc;">
+                            <td style="border: 0.5px solid #ccc;">Masalalar</td>
+                            <td style="border: 0.5px solid #ccc;">{{ problems_count }}</td>
+                        </tr>
+                        <tr style="border: 0.5px solid #ccc;">
+                            <td style="border: 0.5px solid #ccc;">Ishtirokchilar</td>
+                            <td style="border: 0.5px solid #ccc;">{{ users_count }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="pill-tab-add" role="tabpanel" aria-labelledby="add-tab">
+                <div class="card">
+                    <div class="card-body text-danger">
+                        <span class="fas fa-info"></span> Quyidagi jadvalda sizning masalalaringiz keltirilgan. Musobaqa uchun masalalarni shu jadvaldan tanlab qo'shish tugmasini bosing, yoki pastki bo'limdagi <span class="fw-bold text-info">Yaratish</span> orqali yangi masala yarating.
+                    </div> 
+                </div> <br>
+                <form action="{% url 'add_problem_to_contest' contest.id %}" method="post">
+                    {% csrf_token %}
+                    Masalalaringiz:
+                    <div class="scrollbar-overlay" style="max-height: 10rem">
+                        <div class="responsive-table">
+                            <table class="table">
+                                <tr>
+                                    <td>
+                                        <input class="form-check-input" type="checkbox">
+                                    </td>
+                                    <td>#</td>
+                                    <td>Masala</td>
+                                    <td>Qiyinchiligi</td>
+                                    <td>TimeLimit</td>
+                                    <td>MemoryLimit</td>
+                                    <td>Category</td>
+                                </tr>
+                                {% for problem in problems %}
+                                    <tr>
+                                        <td>
+                                            <input class="form-check-input" type="checkbox" name="{{problem.id}}" id="">
+                                        </td>
+                                        <td>{{ problem.id }}</td>
+                                        <td>{{ problem.name }}</td>
+                                        <td>{{ problem.difficulty }}</td>
+                                        <td>{{ problem.timelimit }}</td>
+                                        <td>{{ problem.memorylimit }}</td>
+                                        <td>{{ problem.category }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div> <br>
+                    <button class="btn btn-primary d-flex justify-content-end" type="submit">Qo'shish</button>
+                </form>
+                <hr>
+                Yangi masala yaratish uchun: <a href="{% url 'create_contest_problem' contest.id %}">Yaratish</a>
+            </div>
+            <div class="tab-pane fade" id="pill-tab-problems" role="tabpanel" aria-labelledby="problems-tab">
+                <div class="responsive-table">
+                    <table class="table">
+                        <tr>
+                            <td>#</td>
+                            <td>Masala</td>
+                            <td>Muallif</td>
+                            <td>Holati</td>
+                        </tr>
+                        {% for problem in cproblems %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>
+                                    <a href="{% url 'contest_problem' problem.contest.id forloop.counter|pro_letter %}">{{ problem.name }}</a>
+                                </td>
+                                <td>{{ problem.author }}</td>
+                                <td>Accepted</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+          </div>
+    </div>
+</div>
+{% else %}
+    <div class="card col-md-12">
+        <div class="card-body">
+            <center><p class="fw-black lh-1 text-300 fs-error">401</p></center>
+            <center>
+                <p class="lead mt-4 text-800 mx-auto fw-bold">Afsus! Ro'yxatdan o'tmagansiz!</p>
+            </center>
+            <hr>
+            <center>
+                <p class="lead mt-4 text-800 mx-auto">Sahifadan foydalanish uchun ro'yxatingiz yo'q.</p>
+            </center>
+            <center>
+                <a class="btn btn-falcon-info" href="{% url 'home' %}"><span class="fas fa-home"></span> Bosh sahifa</a>
+            </center>
+        </div>
+    </div>
+{% endif %}
+{% endblock content %}

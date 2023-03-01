@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+{% if user.isTeacher or user.isExpert or user.is_superuser %}
+<div class="card mb-3">
+    <div class="card-header">
+        <center><h3 class="text-info fw-bold">Test yaratish</h3></center>
+    </div>
+    <div class="card-body bg-light">
+        <div class="tab-component">
+            <div class="tab-pane preview-tab-pane active" role="tabpanel" aria-labelledby="tab-dom-81d0dc2f-eeb1-4dab-9b2a-6146c0346f42" id="dom-81d0dc2f-eeb1-4dab-9b2a-6146c0346f42">
+                <ul class="nav nav-pills" id="pill-myTab" role="tablist">
+                    <li class="nav-item"><a class="nav-link active" id="pill-doc-tab" data-bs-toggle="tab" href="#pill-tab-doc" role="tab" aria-controls="pill-tab-doc" aria-selected="true"><span class="fas fa-info"></span></a></li>
+                    <li class="nav-item"><a class="nav-link" id="pill-home-tab" data-bs-toggle="tab" href="#pill-tab-create" role="tab" aria-controls="pill-tab-create" aria-selected="false"><span class="fas fa-edit"></span></a></li>
+                </ul>
+                <div class="tab-content border p-3 mt-3" id="pill-myTabContent">
+                    <div class="tab-pane fade show active" id="pill-tab-doc" role="tabpanel" aria-labelledby="doc-tab">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <span style="font-size: 30px;" class="fas fa-info"></span>  <span class="text-danger">*</span> bor bo'limlarni to'ldirishingiz shart!
+                            </div>
+                        </div>
+                        <p> <span class="text-info fw-bold">Test nomi</span> <span class="text-danger">*</span> - Yaratayotgan testingiz nomi. Misol uchun: Matematika I qism</p>
+                        <p> <span class="text-info fw-bold">Ommaviy/Yopiq</span> - Yaratayotgan testingiz turi(Ommaviy - hamma uchun, Yopiq - faqat siz ruxsat berganlar uchun). Asl holatida True ya'ni Ommaviy</p>
+                        
+                    </div>
+                    <div class="tab-pane fade show" id="pill-tab-create" role="tabpanel" aria-labelledby="home-tab">
+                        <form method="post">
+                            {% csrf_token %}
+                            {{form.author}} <br>
+                            <label for="quiz_name">Test nomi <span class="text-danger">*</span></label>
+                            {{form.name}} <br>
+                            <label for="quiz_password">Test uchun parol <span class="text-danger">*</span></label>
+                            {{form.password}} <br>
+                            <label for="quiz_password">Test sinov davomiyligi.</label>
+                            {{form.duration}} <br>
+                            <p class="fw-bold text-info">Sozlamalar</p>
+                            <label for="quiz_isPublic">Ommaviy/Yopiq</label>
+                            {{form.isPublic}} <br>
+                            <button type="submit" class="btn btn-falcon-primary">Yaratish</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.getElementById("author").value = "{{request.user.id}}"
+</script>
+<script src="{% static 'public/vendors/tinymce/tinymce.min.js' %}"></script>
+{% else %}
+<div class="row mt-3">
+    <div class="card col-md-12">
+        <div class="card-body">
+            <center><p class="fw-black lh-1 text-300 fs-error">404</p></center>
+            <center>
+                <p class="lead mt-4 text-800 mx-auto fw-bold">Afsus! Siz izlayotgan sahifa topilmadi!</p>
+            </center>
+            <hr>
+            <center>
+                <p class="lead mt-4 text-800 mx-auto">Bu sahifa mavjud emas yoki siz uchun yopib qo'yilgan bo'lishi mumkin.</p>
+            </center>
+            <center>
+                <a class="btn btn-falcon-info" href="{% url 'home' %}"><span class="fas fa-home"></span> Bosh sahifa</a>
+            </center>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock content %}
